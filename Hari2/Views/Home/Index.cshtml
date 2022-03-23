@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Hari2.Models.Kontak>
+    @{
+    ViewData["Title"] = "Home Page";
+    }
+    <div class="text-center">
+        <h2>Data Kontak Anda</h2>
+        </table>
+        <table class="table" border="1">
+            <thead>
+                <tr>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Nomor</th>
+                </tr>
+            </thead>
+            @foreach(var item in Model)
+            {
+            <tbody>
+                <tr>
+                    <td>@item.Nama</td>
+                    <td>@item.Nomor</td>
+                </tr>
+            </tbody>
+            }
+        </table>
+    </div>
+
+    <div style="text-align: right;">
+        <a href="Home/Form"><button type="button" class="btn btn-primary">Add Data</button></a>
+    </div>

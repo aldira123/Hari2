@@ -1,0 +1,33 @@
+@model IEnumerable<Hari2.Models.Kontak>
+@{
+    ViewData["Title"] = "Formulir";
+    }
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add Kontak Form</title>
+    </head>
+    <body>
+      <form method="post" action="Index">
+        <fieldset>
+          <div class="mb-3">
+                            <label for="Nama" class="form-label">Nama</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="Nama" name="Nama">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Nomor" class="form-label">Nomor</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="Nomor" name="Nomor">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button action="submit" name="submit" class="btn btn-primary">Submit</button>
+                        </div>
+        </fieldset>
+      </form>
+    </body>
+</html>

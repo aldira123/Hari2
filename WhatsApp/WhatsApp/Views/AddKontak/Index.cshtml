@@ -1,42 +1,63 @@
-﻿@model IEnumerable<WhatsApp.Models.KontakViewModel>
+﻿@model IEnumerable<WhatsApp.ViewModels.KontakViewModel>
 
 
-@{
+    @{
     ViewData["Title"] = "Index";
-}
+    Layout = "_BackgroundLayout";
+    }
+    <div class="content">
+        <div class="py-4 px-3 px-md-4">
+            <div class="card mb-3 mb-md-4">
 
-<h1>Index</h1>
+                <div class="card-body">
+                    <!-- Breadcrumb -->
+                    <nav class="d-none d-md-block" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                         <li class="breadcrumb-item active" aria-current="page">All Users</li>
+                        </ol>
+                    </nav>
+                    <!-- End Breadcrumb -->
+                     <div class="table-responsive-xl">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="font-weight-semi-bold border-top-0 py-2">Name</th>
+                    <th class="font-weight-semi-bold border-top-0 py-2">Nomor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="align-middle py-3">
+                        <div class="d-flex align-items-center">
+                            @item.Nama
+                        </div>
+                    </td>
+                    <td class="py-3">@item.Nomor</td>
+                    <td class="py-3">
+                        <div class="position-relative">
+                            <a class="link-dark d-inline-block" href="#">
+                                <i class="gd-pencil icon-text"></i>
+                            </a>
+                            <a class="link-dark d-inline-block" href="#">
+                                <i class="gd-trash icon-text"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+         </table>    
+         <div style="text-align: right;">
+            <button><a asp-action="Create">Create New</a></button>
+         </div>   
+        
+               
+     </div>
+                </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nama)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nomor)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nama)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nomor)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            </div>
+        </div>
+    </div>
+    

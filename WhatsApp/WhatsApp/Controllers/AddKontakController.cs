@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WhatsApp.Models;
+using WhatsApp.ViewModels;
 using WhatsApp.Services;
 using System.IO;
 using System.Text;
@@ -11,26 +12,25 @@ namespace WhatsApp.Controllers
     {
         List<KontakViewModel> _listKontak = new List<KontakViewModel>();
         private readonly IKontakService _kontakService;
+        private readonly IFileService _fileService;
 
-        public AddKontakController(IKontakService kontakService)
+        public AddKontakController(IKontakService kontakService, IFileService fileService)
         {
             _kontakService = kontakService;
+            _fileService = fileService;
             _listKontak = new List<KontakViewModel>()
             {
                 new KontakViewModel("Aldira","089639971606"),
                 new KontakViewModel("Fitri","089987621623"),
                 new KontakViewModel("Haniifah","089987621623"),
             };
-            using (TextWriter tw = new StreamWriter("D:\\WhatsApp.txt"))
-            {
-                foreach (var s in _listKontak)
-                    tw.WriteLine("Nama: " + s.Nama +" Nomor: "+ s.Nomor);
-            }
+
         }
         // GET: AddKontakController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(_kontakService.GetKontaks());
+            var data = await _fileService.Read();
+            return View(data);
         }
 
         // GET: AddKontakController/Details/5
@@ -41,29 +41,17 @@ namespace WhatsApp.Controllers
 
         public ActionResult Create()
         {
-            return View(new Kontak());
+            return View(new KontakViewModel());
         }
 
         // POST: AddKontakController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Kontak collection)
+        public async Task<ActionResult> Create(KontakViewModel collection)
         {
-            //using (TextWriter tw = new StreamWriter("D:\\WhatsApp.txt", append: true))
-            //{
-            //    tw.WriteLine(new KontakViewModel());
-            //}
-
-            using (FileStream fs = new FileStream("D:\\WhatsApp.txt", FileMode.Append, FileAccess.Write))
-            {
-                using (TextWriter tw = new StreamWriter(fs))
-                 tw.WriteLine(_kontakService.GetKontaks());
-                //System.IO.File.AppendAllLines(new Kontak());
-            }
-
             try
             {
-                System.IO.File.ReadAllLines("D:\\WhatsApp.txt");
+                await _fileService.Write(collection);
                 return RedirectToAction(nameof(Index));
             }
             catch

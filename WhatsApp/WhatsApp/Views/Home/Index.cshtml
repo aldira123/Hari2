@@ -2,40 +2,20 @@
 
 @{
     ViewData["Title"] = "AddKontak";
-}
+    Layout = "_BackgroundLayout";
 
-<h1>AddKontak</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nama)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nomor)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nama)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nomor)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
 }
-    </tbody>
-</table>
+<div class="content">
+        <div class="py-4 px-3 px-md-4">
+            <div class="card mb-3 mb-md-4">
+
+                <div class="card-body" >
+                    <h1> <center>Home</center></h1>   
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+

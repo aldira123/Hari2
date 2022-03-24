@@ -1,4 +1,5 @@
 ﻿using WhatsApp.Models;
+using WhatsApp.ViewModels;
 
 namespace WhatsApp.Services
 {

@@ -4,13 +4,33 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "WhatsApp",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/WhatsApp/WhatsApp/bin/Debug/net6.0/WhatsApp.dll",
+            "program": "${workspaceFolder}WhatsApp/WhatsApp/bin/Debug/net6.0/WhatsApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+
+        {
+            "name": "ECommerce",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "eCommerce-build",
+            "program": "${workspaceFolder}/ECommerce/bin/Debug/net6.0/eCommerce.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

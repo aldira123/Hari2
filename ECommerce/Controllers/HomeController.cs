@@ -22,7 +22,8 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         // var dbResult = await _dbContext.KategoriProduks.ToListAsync();
-        var dbResult = await _dbContext.KategoriProduks.Select(x => new KategoriViewModel {
+        var dbResult = await _dbContext.KategoriProduks.Select(x => new KategoriViewModel
+        {
             NamaKategori = x.NamaKategori,
             DeskripsiKategori = x.DeskripsiKategori
         }).ToListAsync();

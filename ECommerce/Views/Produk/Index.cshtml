@@ -1,0 +1,39 @@
+﻿@model IEnumerable<eCommerce.ViewModels.ProdukViewModel>
+@{
+    ViewData["Title"] = "Daftar Produk";
+    @* Layout = "_AdminLayout"; *@
+    int i = 0;
+}
+
+<h3>Data Produk</h3>
+<table>
+    <thead>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Deskripsi</th>
+        <th>Action</th>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td><img src="@item.Gambar" height="100"/>Nama</td>
+                    <td>@item.NamaProduk</td>
+                    <td>@item.DeskripsiProduk</td>
+                    <td>
+                        <a href="kategori/detail/@item.IdProduk">Detail</a>
+                        <a href="kategori/delete/@item.IdProduk">Delete</a>
+                    </td>
+                </tr>
+            }
+        }else {
+            <tr>
+                <td colspan="4">Data kosong</td>
+            </tr>
+        }
+    </tbody>
+</table>

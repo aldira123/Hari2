@@ -6,6 +6,7 @@ public class ProdukViewModel
 {
     public ProdukViewModel()
     {  
+        Kategories = new List<KategoriViewModel>();
     }
     public ProdukViewModel(int id, string nama, string deskripsi, decimal harga)
     {
@@ -14,7 +15,20 @@ public class ProdukViewModel
         DeskripsiProduk = deskripsi;
         HargaProduk = harga;
         Stok = 100;
+        KategoriId = Array.Empty<int>();
+        Kategories = new List<KategoriViewModel>();
     }
+
+     public ProdukViewModel(Produk item)
+        {
+            IdProduk = item.IdProduk ;
+            NamaProduk = item.NamaProduk;
+            DeskripsiProduk = item.DeskripsiProduk;
+            HargaProduk = item.HargaProduk;
+            Stok = item.Stok;
+            Kategories = new List<KategoriViewModel>();
+        }
+        
     public int IdProduk { get; set; }
     [Required]
     public string NamaProduk { get; set; } = null!;
@@ -23,8 +37,14 @@ public class ProdukViewModel
     public decimal HargaProduk { get; set; }
     public int Stok { get; set; }
     public string? Gambar { get; set; }
-    public int KategoriId { get; set; }
-    public string? NamaKategori { get; set; }
+    public string GambarSrc {
+        get {
+            return (string.IsNullOrEmpty(Gambar) ? "images/default.png" : Gambar );
+        }
+    }
+    public IFormFile? GambarFile { get; set; }
+    public int[] KategoriId { get; set; }
+    public List<KategoriViewModel> Kategories { get; set; }
 
     public Produk ConvertToDbModel(){
         return new Produk() {
@@ -33,7 +53,7 @@ public class ProdukViewModel
             DeskripsiProduk = this.DeskripsiProduk,
             HargaProduk = this.HargaProduk,
             Gambar = this.Gambar ?? string.Empty,
-            Stok = this.Stok
+            Stok = this.Stok,
         };
     }
 }

@@ -1,33 +1,33 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using eCommerce.Datas.Entities;
+// using eCommerce.Datas.Entities;
 using eCommerce.Models;
-using eCommerce.Datas;
-using eCommerce.ViewModels;
+// using eCommerce.Datas;
+// using eCommerce.ViewModels;
 
 namespace eCommerce.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly eCommerce.Datas.eCommerceDbContext _dbContext;
+   // private readonly eCommerce.Datas.eCommerceDbContext _dbContext;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger, eCommerce.Datas.eCommerceDbContext dbContext)
+    public HomeController(ILogger<HomeController> logger)
     {
-        _dbContext = dbContext;
+        //_dbContext = dbContext;
         _logger = logger;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         // var dbResult = await _dbContext.KategoriProduks.ToListAsync();
-        var dbResult = await _dbContext.KategoriProduks.Select(x => new KategoriViewModel
-        {
-            NamaKategori = x.NamaKategori,
-            DeskripsiKategori = x.DeskripsiKategori
-        }).ToListAsync();
-        return View(dbResult);
+        //var dbResult = await _dbContext.KategoriProduks.Select(x => new KategoriViewModel
+        //{
+        //    NamaKategori = x.NamaKategori,
+        //    DeskripsiKategori = x.DeskripsiKategori
+        //}).ToListAsync();
+        return View();
     }
 
     public IActionResult Privacy()

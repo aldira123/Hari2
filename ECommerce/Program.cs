@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using eCommerce.Datas;
+using eCommerce.Interface;
+using eCommerce.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//Add services to the container.
 builder.Services.AddDbContext<eCommerceDbContext>(
             dbContextOptions => dbContextOptions
                 .UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")))
@@ -15,6 +17,10 @@ builder.Services.AddDbContext<eCommerceDbContext>(
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
         );
+
+builder.Services.AddScoped<IKategoriService, KategoriService>();
+builder.Services.AddScoped<IProdukService, ProdukService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

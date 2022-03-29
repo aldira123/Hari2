@@ -1,39 +1,132 @@
 ﻿@model IEnumerable<eCommerce.ViewModels.ProdukViewModel>
 @{
     ViewData["Title"] = "Daftar Produk";
-    @* Layout = "_AdminLayout"; *@
+    Layout = "_AdminLayout";
     int i = 0;
 }
 
-<h3>Data Produk</h3>
-<table>
-    <thead>
-        <th>No</th>
-        <th>Nama</th>
-        <th>Deskripsi</th>
-        <th>Action</th>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                i++;
-                <tr>
-                    <td>@i</td>
-                    <td><img src="@item.Gambar" height="100"/>Nama</td>
-                    <td>@item.NamaProduk</td>
-                    <td>@item.DeskripsiProduk</td>
-                    <td>
-                        <a href="kategori/detail/@item.IdProduk">Detail</a>
-                        <a href="kategori/delete/@item.IdProduk">Delete</a>
-                    </td>
-                </tr>
-            }
-        }else {
-            <tr>
-                <td colspan="4">Data kosong</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+        <!-- Confirm Alert -->
+        <form asp-action="Delete" method="post">
+            <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="pos_middle">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body" style="padding: 20px 25px;">
+                                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+                                <h4 class="text-center font-grey-gallery" style="font-weight: 600;">Are you sure to delete this item?</h4>
+                                <br />
+                                <div class="row">
+                                    <input type="hidden" id="itemId" name="id" />
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-block green uppercase" data-backdrop="static" data-keyboard="false">Yes</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="#" class="btn btn-block red uppercase" data-backdrop="static" data-keyboard="false" data-dismiss="modal">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        </form>
+        <!-- /.modal -->
+        <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
+<!-- Container Fluid-->
+<div class="container-fluid" id="container-wrapper">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Produk</h1>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="./">Home</a></li>
+            <li class="breadcrumb-item">List</li>
+            <li class="breadcrumb-item active" aria-current="page">Produk</li>
+        </ol>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <!-- Simple Tables -->
+            <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Produk</h6>
+                    <h6 class="m-0 font-weight-bold text-primary"><a asp-action="Create">Create New</a></h6>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Kategori</th>
+                                <th>Gambar</th>
+                                <th>Nama Produk</th>
+                                <th>Deskripsi Produk</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Edit</th>
+                                <th>Detail</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>
+                                            @foreach (var kategori in item.Kategories)
+                                            {
+                                                <p>@kategori.NamaKategori</p>
+                                            }
+                                        </td>
+                                        <td><img src="~/@item.GambarSrc" height="100" /></td>
+                                        <td> @item.NamaProduk</td>
+                                        <td> @item.DeskripsiProduk</td>
+                                        <td> @item.HargaProduk</td>
+                                        <td> @item.Stok</td>
+                                        <td><a asp-action="Edit" asp-route-id="@item.IdProduk"
+                                        class="btn btn-sm btn-primary">Edit</a></td>
+                                        <td><a asp-action="Details" asp-route-id="@item.IdProduk"
+                                        class="btn btn-sm btn-primary">Detail</a></td>
+                                        <td><a class="btn-delete" data-id="@item.IdProduk">Delete</a></td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4">Data kosong</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer"></div>
+            </div>
+        </div>
+    </div>
+    <!--Row-->
+    @section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //Show modal for delete confirmation
+            $(document).on("click", ".btn-delete", function () {
+            
+                var id = $(this).data('id');
+                console.log('id produk: ' + id);
+                //ubah value yang id = itemId yang ada di dalam class .modal-body
+                $(".modal-body #itemId").val(id);
+                //tampilkan modal/dialog
+                $("#confirmDelete").modal('show');
+            });
+        });
+    </script>
+}

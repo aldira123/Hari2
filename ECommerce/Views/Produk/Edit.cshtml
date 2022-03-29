@@ -1,19 +1,19 @@
-﻿@model eCommerce.Datas.Entities.Produk
+﻿@model eCommerce.ViewModels.ProdukViewModel
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "_AdminLayout";
 }
 
-<h1>Edit</h1>
-
-<h4>Produk</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="card mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Produk</h6>
+    </div>
+    <div class="card-body">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdProduk" />
-            <div class="form-group">
+             <div class="form-group">
                 <label asp-for="NamaProduk" class="control-label"></label>
                 <input asp-for="NamaProduk" class="form-control" />
                 <span asp-validation-for="NamaProduk" class="text-danger"></span>
@@ -38,17 +38,12 @@
                 <input asp-for="Gambar" class="form-control" />
                 <span asp-validation-for="Gambar" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            <button type="submit" value="Create" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

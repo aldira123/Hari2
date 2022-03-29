@@ -113,7 +113,7 @@ namespace eCommerce.Controllers
             {
                 fileName = $"{Guid.NewGuid()}-{request.GambarFile?.FileName}";
 
-                string filePathName = $"{_iWebHost.WebRootPath}/{fileName}";
+                string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
                 
                 using(var streamWriter = System.IO.File.Create(filePathName)){
                     //await streamWriter.WriteAsync(Common.StreamToBytes(request.GambarFile.OpenReadStream()));

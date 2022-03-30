@@ -19,16 +19,6 @@ public class ProdukViewModel
         Kategories = new List<KategoriViewModel>();
     }
 
-     public ProdukViewModel(Produk item)
-        {
-            IdProduk = item.IdProduk ;
-            NamaProduk = item.NamaProduk;
-            DeskripsiProduk = item.DeskripsiProduk;
-            HargaProduk = item.HargaProduk;
-            Stok = item.Stok;
-            Kategories = new List<KategoriViewModel>();
-        }
-        
     public int IdProduk { get; set; }
     [Required]
     public string NamaProduk { get; set; } = null!;

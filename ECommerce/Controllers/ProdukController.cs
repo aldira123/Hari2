@@ -8,24 +8,32 @@ using eCommerce.ViewModels;
 using eCommerce.Interface;
 using eCommerce.Helpers;
 using eCommerce.Services;
+using Microsoft.AspNetCore.Authorization;
+
+
+
 
 namespace eCommerce.Controllers
 {
+    [Authorize]
     public class ProdukController : Controller
     {
         private readonly IProdukService _produkService;
         private readonly IKategoriService _kategoriService;
+        private readonly IProdukKategoriService _produkKategoriService;
         private readonly IWebHostEnvironment _iWebHost;
         private readonly ILogger<ProdukController> _logger;
 
 
-        public ProdukController(ILogger<ProdukController> logger, IProdukService produkService, 
-        IKategoriService kategoriService, IWebHostEnvironment iWebHost )
+        public ProdukController(ILogger<ProdukController> logger, IProdukService produkService,
+        IKategoriService kategoriService, IProdukKategoriService produkKategoriService,
+        IWebHostEnvironment iWebHost)
         {
-           _logger = logger;
-           _iWebHost = iWebHost;
-           _produkService = produkService;
-           _kategoriService = kategoriService;
+            _logger = logger;
+            _iWebHost = iWebHost;
+            _produkService = produkService;
+            _kategoriService = kategoriService;
+            _produkKategoriService = produkKategoriService;
         }
 
         // GET: Produk
@@ -33,56 +41,80 @@ namespace eCommerce.Controllers
         {
             var dbResult = await _produkService.GetAll();
 
-        var viewModels = new List<ProdukViewModel>();
+            var viewModels = new List<ProdukViewModel>();
 
-        for (int i = 0; i < dbResult.Count; i++)
-        {
-            viewModels.Add(new ProdukViewModel{
-                IdProduk = dbResult[i].IdProduk,
-                NamaProduk = dbResult[i].NamaProduk,
-                DeskripsiProduk = dbResult[i].DeskripsiProduk,
-                Gambar = dbResult[i].Gambar,
-                HargaProduk = dbResult[i].HargaProduk,
-                Stok = dbResult[i].Stok,
-                 Kategories = dbResult[i].ProdukKategoris.Select(x => new KategoriViewModel {
-                    IdKategori = x.IdKategori,
-                    NamaKategori = x.IdKategoriNavigation.NamaKategori,
-                    Icon = x.IdKategoriNavigation.Icon
-                }).ToList()
-            });
+            for (int i = 0; i < dbResult.Count; i++)
+            {
+                viewModels.Add(new ProdukViewModel
+                {
+                    IdProduk = dbResult[i].IdProduk,
+                    NamaProduk = dbResult[i].NamaProduk,
+                    DeskripsiProduk = dbResult[i].DeskripsiProduk,
+                    Gambar = dbResult[i].Gambar,
+                    HargaProduk = dbResult[i].HargaProduk,
+                    Stok = dbResult[i].Stok,
+                    Kategories = dbResult[i].ProdukKategoris.Select(x => new KategoriViewModel
+                    {
+                        IdKategori = x.IdKategori,
+                        NamaKategori = x.IdKategoriNavigation.NamaKategori,
+                        Icon = x.IdKategoriNavigation.Icon
+                    }).ToList()
+                });
+            }
+            return View(viewModels);
         }
-         return View(viewModels);
-    }
 
         // GET: Produk/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-             if (id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Produk produk1 = await _produkService.Get(id.Value);
-            var produk = produk1;
+            var produk = await _produkService.Get(id.Value);
             if (produk == null)
             {
                 return NotFound();
             }
-            return View(new ProdukViewModel(produk));
+            var kategoriIds = await _produkKategoriService.GetKategoriIds(produk.IdProduk);
+
+            await SetKategoriDataSource(kategoriIds);
+            return View(new ProdukViewModel()
+            {
+                IdProduk = produk.IdProduk,
+                NamaProduk = produk.NamaProduk,
+                DeskripsiProduk = produk.DeskripsiProduk,
+                HargaProduk = produk.HargaProduk,
+                Gambar = produk.Gambar,
+                KategoriId = kategoriIds
+            });
         }
 
         //Transfer data list of kategori ke view dimasukan dalam selectlistitem
-    private async Task SetKategoriDataSource()
-    {
-        var kategoriViewModels = await _kategoriService.GetAll();
-
-        ViewBag.KategoriDataSource = kategoriViewModels.Select(x => new SelectListItem
+        private async Task SetKategoriDataSource()
         {
-            Value = x.IdKategori.ToString(),
-            Text = x.NamaKategori,
-            Selected = false
-        }).ToList();
-    }
+            var kategoriViewModels = await _kategoriService.GetAll();
+
+            ViewBag.KategoriDataSource = kategoriViewModels.Select(x => new SelectListItem
+            {
+                Value = x.IdKategori.ToString(),
+                Text = x.NamaKategori,
+                Selected = false
+            }).ToList();
+        }
+
+        private async Task SetKategoriDataSource(int[] kategori)
+        {
+            var kategoriViewModels = await _kategoriService.GetAll();
+
+            ViewBag.KategoriDataSource = kategoriViewModels.Select(x => new SelectListItem
+            {
+                Value = x.IdKategori.ToString(),
+                Text = x.NamaKategori,
+                Selected = kategori.FirstOrDefault(y => y == x.IdKategori) == 0 ? false : true
+            }).ToList();
+        }
 
         // GET: Produk/Create
         public async Task<IActionResult> Create()
@@ -92,64 +124,73 @@ namespace eCommerce.Controllers
         }
 
         // POST: Produk/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
-    public async Task<IActionResult> Create(ProdukViewModel request) {
-        if(!ModelState.IsValid){
-            await SetKategoriDataSource();
-            return View(request);
-        }
-        if(request == null){
-            await SetKategoriDataSource();
-            return View(request);
-        }
-        try{
-
-
-            string fileName = string.Empty;
-            
-            if(request.GambarFile != null) 
+        public async Task<IActionResult> Create(ProdukViewModel request)
+        {
+            if (!ModelState.IsValid)
             {
-                fileName = $"{Guid.NewGuid()}-{request.GambarFile?.FileName}";
+                await SetKategoriDataSource();
+                return View(request);
+            }
+            if (request == null)
+            {
+                await SetKategoriDataSource();
+                return View(request);
+            }
+            try
+            {
 
-                string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
-                
-                using(var streamWriter = System.IO.File.Create(filePathName)){
-                    //await streamWriter.WriteAsync(Common.StreamToBytes(request.GambarFile.OpenReadStream()));
-                    //using extension to convert stream to bytes
-                    await streamWriter.WriteAsync(request.GambarFile.OpenReadStream().ToBytes());
+
+                string fileName = string.Empty;
+
+                if (request.GambarFile != null)
+                {
+                    fileName = $"{Guid.NewGuid()}-{request.GambarFile?.FileName}";
+
+                    string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
+
+                    using (var streamWriter = System.IO.File.Create(filePathName))
+                    {
+                        //await streamWriter.WriteAsync(Common.StreamToBytes(request.GambarFile.OpenReadStream()));
+                        //using extension to convert stream to bytes
+                        await streamWriter.WriteAsync(request.GambarFile.OpenReadStream().ToBytes());
+                    }
                 }
+
+                var product = request.ConvertToDbModel();
+                product.Gambar = $"images/{fileName}";
+
+                //Insert to ProdukKategori table
+                for (int i = 0; i < request.KategoriId.Length; i++)
+                {
+                    product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori
+                    {
+                        IdKategori = request.KategoriId[i],
+                        IdProduk = product.IdProduk
+                    });
+                }
+
+
+                await _produkService.Add(product);
+
+                return Redirect(nameof(Index));
             }
-
-            var product = request.ConvertToDbModel();
-            product.Gambar = $"images/{fileName}";
-
-            //Insert to ProdukKategori table
-            for (int i = 0; i < request.KategoriId.Length; i++){
-            product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori 
+            catch (InvalidOperationException ex)
             {
-                IdKategori = request.KategoriId[i],
-                IdProduk = product.IdProduk
-            });
+                ViewBag.ErrorMessage = ex.Message;
             }
-            
+            catch (Exception)
+            {
+                throw;
+            }
 
-            await _produkService.Add(product);
 
-            return Redirect(nameof(Index));
-        }catch(InvalidOperationException ex){
-            ViewBag.ErrorMessage = ex.Message;
+            await SetKategoriDataSource();
+            return View(request);
         }
-        catch(Exception) {
-            throw;
-        }
-
-
-        await SetKategoriDataSource();
-        return View(request);
-    }
         // GET: Produk/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -162,59 +203,112 @@ namespace eCommerce.Controllers
             {
                 return NotFound();
             }
-            return View(new ProdukViewModel(produk));
+            var kategoriIds = await _produkKategoriService.GetKategoriIds(produk.IdProduk);
+
+            await SetKategoriDataSource(kategoriIds);
+            return View(new ProdukViewModel()
+            {
+                IdProduk = produk.IdProduk,
+                NamaProduk = produk.NamaProduk,
+                DeskripsiProduk = produk.DeskripsiProduk,
+                HargaProduk = produk.HargaProduk,
+                Gambar = produk.Gambar,
+                KategoriId = kategoriIds
+            });
         }
 
         // POST: Produk/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public async Task<IActionResult> Edit(int? id, ProdukViewModel request)
         {
-             if(!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
+                await SetKategoriDataSource();
+                return View(request);
+            }
+
+            if (request == null)
+            {
+                await SetKategoriDataSource();
+                return View(request);
+            }
+
+            try
+            {
+
+                string fileName = string.Empty;
+
+                if (request.GambarFile != null)
+                {
+                    fileName = $"{Guid.NewGuid()}-{request.GambarFile?.FileName}";
+
+                    string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
+
+                    using (var streamWriter = System.IO.File.Create(filePathName))
+                    {
+                        //await streamWriter.WriteAsync(Common.StreamToBytes(request.GambarFile.OpenReadStream()));
+                        //using extension to convert stream to bytes
+                        await streamWriter.WriteAsync(request.GambarFile.OpenReadStream().ToBytes());
+                    }
+                }
+
+                var product = request.ConvertToDbModel();
+                product.Gambar = $"images/{fileName}";
+
+                //Insert to ProdukKategori table
+                for (int i = 0; i < request.KategoriId.Length; i++)
+                {
+                    product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori
+                    {
+                        IdKategori = request.KategoriId[i],
+                        IdProduk = product.IdProduk
+                    });
+                }
+
+                await _produkService.Update(product);
+
+                return Redirect(nameof(Index));
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
             await SetKategoriDataSource();
             return View(request);
         }
-        try{
 
-            var product = request.ConvertToDbModel();
-
-
-            // //Update to ProdukKategori table
-            // for (int i = 0; i < request.KategoriId.Length; i++){
-            // product.ProdukKategoris.Update(new Datas.Entities.ProdukKategori 
-            // {
-            //     IdKategori = product.KategoriId[i],
-            //     IdProduk = product.IdProduk
-            // });
-            // }
-           
-
-            await _produkService.Update(product);
-
-            return RedirectToAction(nameof(Index));
-        }catch(InvalidOperationException ex){
-            ViewBag.ErrorMessage = ex.Message;
-        }
-        catch(Exception) {
-            throw;
-        }
-        await SetKategoriDataSource();
-        return View(request);
-    }
-        
 
         // GET: Produk/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null){
-                return BadRequest();
-            }
-            var delete = await _produkService.Get(id.Value);
-             if (delete == null){
+            if (id == null)
+            {
                 return NotFound();
             }
-           return View(new ProdukViewModel(delete));
+
+            var produk = await _produkService.Get(id.Value);
+            if (produk == null)
+            {
+                return NotFound();
+            }
+            var kategoriIds = await _produkKategoriService.GetKategoriIds(produk.IdProduk);
+
+            await SetKategoriDataSource(kategoriIds);
+            return View(new ProdukViewModel()
+            {
+                IdProduk = produk.IdProduk,
+                NamaProduk = produk.NamaProduk,
+                DeskripsiProduk = produk.DeskripsiProduk,
+                HargaProduk = produk.HargaProduk,
+                Gambar = produk.Gambar,
+                KategoriId = kategoriIds
+            });
         }
 
         // POST: Produk/Delete/5
@@ -222,7 +316,7 @@ namespace eCommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id, ProdukViewModel request)
         {
-             if (id == null )
+            if (id == null)
             {
                 return BadRequest();
             }
@@ -244,9 +338,5 @@ namespace eCommerce.Controllers
             return View(request);
         }
 
-        // private bool ProdukExists(int id)
-        // {
-        //     return _context.Produks.Any(e => e.IdProduk == id);
-        // }
     }
 }

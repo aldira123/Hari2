@@ -7,8 +7,11 @@ using eCommerce.Interface;
 using eCommerce.Datas.Entities;
 using eCommerce.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCommerce.Controllers;
+
+[Authorize]
 
 public class KategoriController : Controller
 {

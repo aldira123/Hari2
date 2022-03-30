@@ -1,0 +1,71 @@
+@model eCommerce.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LoginRegisterLayout";
+}
+
+<body class="bg-gradient-login">
+    @Html.AntiForgeryToken()
+    <!-- Login Content -->
+    <div class="container-login">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-12 col-md-9">
+                <div class="card shadow-sm my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="login-form">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Register</h1>
+                                    </div>
+                                    <form asp-action="Register" method="post">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                         <div class="form-group">
+                                            <label asp-for="Nama" class="control-label"></label>
+                                            <input asp-for="Nama" class="form-control" placeholder="Enter your full name"/>
+                                            <span asp-validation-for="Nama" class="text-danger"></span>
+                                        </div>
+                                         <div class="form-group">
+                                            <label asp-for="Email" class="control-label"></label>
+                                            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                         <div class="form-group">
+                                            <label asp-for="NoHp" class="control-label">No Handphone</label>
+                                            <input asp-for="NoHp" class="form-control" placeholder="Enter your active phone number" />
+                                            <span asp-validation-for="NoHp" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Username" class="control-label"></label>
+                                            <input asp-for="Username" class="form-control" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label"></label>
+                                            <input asp-for="Password" class="form-control" type="password" placeholder="Password"/>
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                         <div class="form-group">
+                                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                                            <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Repeat Password"/>
+                                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Register" class="btn btn-primary btn-block" />
+                                        </div>
+                                    </form>
+                                     <div class="text-center">
+                    <a class="font-weight-bold small" href="/Akun/LoginCustomer">Already have an account?</a>
+                  </div>
+                                    <hr>
+                                    <div class="text-center">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,5 +1,5 @@
 ﻿@using eCommerce.ViewModels;
-@model IEnumerable<eCommerce.ViewModels.KategoriViewModel>
+@model IEnumerable<eCommerce.ViewModels.AdminViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -39,11 +39,11 @@
 <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Kategori</h1>
+            <h1 class="h3 mb-0 text-gray-800">Admin</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="./">Home</a></li>
               <li class="breadcrumb-item">List</li>
-              <li class="breadcrumb-item active" aria-current="page">Kategori</li>
+              <li class="breadcrumb-item active" aria-current="page">Admin</li>
             </ol>
           </div>
 
@@ -52,7 +52,7 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Kategori</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Admin</h6>
                   <h6 class="m-0 font-weight-bold text-primary" ><a asp-action="Create">Create New</a></h6>
                 </div>
                 
@@ -60,9 +60,11 @@
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Nama Kategori</th>
-                        <th>Deskripsi Kategori</th>
-                        <th>Icon</th>
+                        <th>Nama</th>
+                        <th>No HP</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Email</th>
                         <th>Edit</th>
                         <th>Detail</th>
                         <th>Delete</th>
@@ -71,12 +73,14 @@
                     <tbody>
                         @foreach (var item in Model){
                       <tr>
-                        <td> @item.NamaKategori</td>
-                        <td> @item.DeskripsiKategori</td>
-                        <td><img src="~/@item.IconSrc" height="50"></img> </td>
-                        <td><a asp-action="Edit" asp-route-id="@item.IdKategori" class="btn btn-sm btn-primary">Edit</a></td>
-                        <td><a asp-action="Details" asp-route-id="@item.IdKategori" class="btn btn-sm btn-primary">Detail</a></td>
-                        <td><a class="btn-delete" data-id="@item.IdKategori">Delete</a></td>
+                        <td> @item.Nama</td>
+                        <td> @item.NoHp</td>
+                        <td> @item.Username</td>
+                        <td> @item.Password</td>
+                        <td> @item.Email</td>
+                        <td><a asp-action="Edit" asp-route-id="@item.IdAdmin" class="btn btn-sm btn-primary">Edit</a></td>
+                        <td><a asp-action="Details" asp-route-id="@item.IdAdmin" class="btn btn-sm btn-primary">Detail</a></td>
+                        <td><a class="btn-delete" data-id="@item.IdAdmin">Delete</a></td>
                       </tr>
                         }
                     </tbody>

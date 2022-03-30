@@ -114,36 +114,5 @@ public class ProdukService : BaseDbService, IProdukService
 
         return Produk;
     }
-
-    public async Task<Produk> Update(Produk obj, int idKategori)
-    {
-        if(obj == null)
-        {
-            throw new ArgumentNullException("Produk cannot be null");
-        }
-
-        var Produk = await DbContext.Produks.FirstOrDefaultAsync(x=>x.IdProduk == obj.IdProduk);
-
-        if(Produk == null) {
-            throw new InvalidOperationException($"Produk with ID {obj.IdProduk} doesn't exist in database");
-        }
-
-         DbContext.ProdukKategoris.Update(new ProdukKategori{
-            IdKategori = idKategori,
-            IdProduk = obj.IdProduk,
-        });
-
-        Produk.NamaProduk = obj.NamaProduk;
-        Produk.DeskripsiProduk = obj.DeskripsiProduk;
-        Produk.HargaProduk = obj.HargaProduk;
-        Produk.Stok = obj.Stok;
-        Produk.Gambar = obj.Gambar;
-        
-        DbContext.Update(Produk);
-        await DbContext.SaveChangesAsync();
-
-        return Produk;
-
-    }
   }
 }

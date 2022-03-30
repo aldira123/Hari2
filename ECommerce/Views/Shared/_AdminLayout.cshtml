@@ -45,6 +45,7 @@
             <h6 class="collapse-header">Database</h6>
             <a class="collapse-item" asp-controller="Kategori" asp-action="Index">Kategori</a>
             <a class="collapse-item" asp-controller="Produk" asp-action="Index">Produk</a>
+            <a class="collapse-item" asp-controller="Admin" asp-action="Index">Admin</a>
           </div>
         </div>
       </li>
@@ -231,7 +232,7 @@
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal" href="/akun/Logout">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -272,7 +273,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                  <a href="login.html" class="btn btn-primary">Logout</a>
+                  <a  href="/akun/Logout" class="btn btn-primary">Logout</a>
                 </div>
               </div>
             </div>

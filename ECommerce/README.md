@@ -18,3 +18,9 @@
 ![Register](https://user-images.githubusercontent.com/102128920/160933505-eac2b93e-c600-4258-ab8e-5012afd4d470.png)
 # Admin
 ![ListAdmin](https://user-images.githubusercontent.com/102128920/160933509-830456d1-91f8-48e9-bec4-d7523598e447.png)
+# Katalog Produk
+![ListProdukCustomer](https://user-images.githubusercontent.com/102128920/161178253-9e5da872-0fe6-4913-b2cf-af46d6b9d681.png)
+# Katalog Kategori
+![listKategoriCustumer](https://user-images.githubusercontent.com/102128920/161178429-ca36784f-90d4-4412-9c14-e40d629e7c45.png)
+# Detail Produk
+![DetailProduk](https://user-images.githubusercontent.com/102128920/161178350-9a4c9e2b-6285-43dc-a8a2-c69b703f65d4.png)

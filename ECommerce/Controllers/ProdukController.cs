@@ -1,21 +1,15 @@
 ﻿#nullable disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using eCommerce.Datas;
-using eCommerce.Datas.Entities;
 using eCommerce.ViewModels;
 using eCommerce.Interface;
 using eCommerce.Helpers;
-using eCommerce.Services;
 using Microsoft.AspNetCore.Authorization;
-
-
 
 
 namespace eCommerce.Controllers
 {
-    [Authorize]
+   [Authorize(Roles = AppConstant.ADMIN)]
     public class ProdukController : Controller
     {
         private readonly IProdukService _produkService;
@@ -52,7 +46,6 @@ namespace eCommerce.Controllers
                     DeskripsiProduk = dbResult[i].DeskripsiProduk,
                     Gambar = dbResult[i].Gambar,
                     HargaProduk = dbResult[i].HargaProduk,
-                    Stok = dbResult[i].Stok,
                     Kategories = dbResult[i].ProdukKategoris.Select(x => new KategoriViewModel
                     {
                         IdKategori = x.IdKategori,
@@ -223,7 +216,7 @@ namespace eCommerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await SetKategoriDataSource();
+                await SetKategoriDataSource(request.KategoriId);
                 return View(request);
             }
 
@@ -232,7 +225,7 @@ namespace eCommerce.Controllers
                 await SetKategoriDataSource();
                 return View(request);
             }
-
+          
             try
             {
 
@@ -250,24 +243,56 @@ namespace eCommerce.Controllers
                         //using extension to convert stream to bytes
                         await streamWriter.WriteAsync(request.GambarFile.OpenReadStream().ToBytes());
                     }
-                }
+                } 
 
                 var product = request.ConvertToDbModel();
-                product.Gambar = $"images/{fileName}";
+                if (request.GambarFile != null)
+                {
+                    product.Gambar = $"images/{fileName}";
+                }
 
-                //Insert to ProdukKategori table
+                //Update ProdukKategori
+                var productKategories = await _produkKategoriService.GetKategoriIds(request.IdProduk);
+
                 for (int i = 0; i < request.KategoriId.Length; i++)
                 {
-                    product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori
+                    if (productKategories != null && productKategories.Any())
                     {
-                        IdKategori = request.KategoriId[i],
-                        IdProduk = product.IdProduk
-                    });
+                        if (!productKategories.Any(x => x == request.KategoriId[i]))
+                        {
+                            product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori
+                            {
+                                IdKategori = request.KategoriId[i],
+                                IdProduk = product.IdProduk
+                            });
+                        }
+                    }
+                    else
+                    {
+                        product.ProdukKategoris.Add(new Datas.Entities.ProdukKategori
+                        {
+                            IdKategori = request.KategoriId[i],
+                            IdProduk = product.IdProduk
+                        });
+                    }
                 }
+
+                //Remove kategori from product
+                if (productKategories != null && (product.ProdukKategoris != null && product.ProdukKategoris.Any()))
+                {
+                    foreach (var item in productKategories)
+                    {
+                        if (!product.ProdukKategoris.Any(x => x.IdKategori == item))
+                        {
+                            await _produkKategoriService.Remove(request.IdProduk, item);
+                        }
+                    }
+                }
+
 
                 await _produkService.Update(product);
 
-                return Redirect(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
             {

@@ -15,6 +15,14 @@ public static class  Common
         
         return ms.ToArray();
     }    
+
+    public static int ToInt(this string content){
+        if(int.TryParse(content, out int result)){
+            return result;
+        }
+
+        throw new InvalidOperationException("Anda belum login, silahkan login terlebih dahulu");
+    }
 }
 
 }

@@ -105,9 +105,17 @@ public class ProdukService : BaseDbService, IProdukService
 
         Produk.NamaProduk = obj.NamaProduk;
         Produk.DeskripsiProduk = obj.DeskripsiProduk;
-        Produk.HargaProduk = obj.HargaProduk;
-        Produk.Stok = obj.Stok;
-        Produk.Gambar = obj.Gambar;
+            if (!string.IsNullOrEmpty(obj.Gambar))
+            {
+                Produk.Gambar = obj.Gambar;
+            }
+            Produk.HargaProduk = obj.HargaProduk;
+
+            if (obj.ProdukKategoris != null && obj.ProdukKategoris.Any())
+            {
+                Produk.ProdukKategoris = obj.ProdukKategoris;
+            }
+            Produk.Stok = obj.Stok;
         
         DbContext.Update(Produk);
         await DbContext.SaveChangesAsync();

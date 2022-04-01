@@ -85,7 +85,10 @@ public class KategoriService : BaseDbService, IKategoriService
 
         kategori.NamaKategori = obj.NamaKategori;
         kategori.DeskripsiKategori = obj.DeskripsiKategori;
-        kategori.Icon = obj.Icon;
+         if (!string.IsNullOrEmpty(obj.Icon))
+            {
+                kategori.Icon = obj.Icon;
+            }
         
         DbContext.Update(kategori);
         await DbContext.SaveChangesAsync();

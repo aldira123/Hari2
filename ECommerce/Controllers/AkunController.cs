@@ -34,8 +34,7 @@ public class AkunController : Controller
             return View(request);
         }
         try{
-            var register = request.ConvertToDbModel();
-            await _akunService.Register(register);
+            await _akunService.Register(request);
 
             return Redirect(nameof(LoginCustomer));   
         }catch(InvalidOperationException ex){
@@ -77,7 +76,7 @@ public class AkunController : Controller
             #region set session login
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name,result.Email?? result.Nama),
+            new Claim(ClaimTypes.Email,result.Email?? result.Nama),
             new Claim("FullName", result.Nama),
             new Claim(ClaimTypes.Role, "Administrator"),
         };
@@ -144,9 +143,10 @@ public class AkunController : Controller
             #region set session login
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name,result.Email?? result.Nama),
+            new Claim(ClaimTypes.NameIdentifier, result.IdCustomer.ToString()),
+            new Claim(ClaimTypes.Email,result.Email?? result.Nama),
             new Claim("FullName", result.Nama),
-            new Claim(ClaimTypes.Role, "User"),
+            new Claim(ClaimTypes.Role, "Customer"),
         };
 
             var claimsIdentity = new ClaimsIdentity(

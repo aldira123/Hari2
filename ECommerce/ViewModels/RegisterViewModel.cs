@@ -15,7 +15,6 @@ namespace eCommerce.ViewModels
 
         public RegisterViewModel(Customer item)
         {
-                IdCustomer = item.IdCustomer;
                 Nama = item.Nama;
                 NoHp = item.NoHp;
                 Username = item.Username;
@@ -23,7 +22,7 @@ namespace eCommerce.ViewModels
                 Email = item.Email;
         }
 
-       public int IdCustomer { get; set; }
+       
        [Required]
         public string Nama { get; set; } = null!;
         public string NoHp { get; set; } = null!;
@@ -32,15 +31,16 @@ namespace eCommerce.ViewModels
         [Required]
         public string Password { get; set; } = null!;
         [Required]
+        [Compare(nameof(Password))]
         public string ConfirmPassword { get; set; } = null!;
         [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
 
         public Customer ConvertToDbModel()
         {
             return new Customer
             {
-                IdCustomer= this.IdCustomer,
                 Nama = this.Nama,
                 NoHp = this.NoHp,
                 Username = this.Username,

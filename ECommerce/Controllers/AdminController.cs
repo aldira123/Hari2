@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace eCommerce.Controllers;
 
-[Authorize]
+
 
 public class AdminController : Controller
 {

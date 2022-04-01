@@ -14,7 +14,6 @@ public class ProdukViewModel
         NamaProduk = nama;
         DeskripsiProduk = deskripsi;
         HargaProduk = harga;
-        Stok = 100;
         KategoriId = Array.Empty<int>();
         Kategories = new List<KategoriViewModel>();
     }
@@ -25,7 +24,7 @@ public class ProdukViewModel
     public string DeskripsiProduk { get; set; } = null!;
     [Required]
     public decimal HargaProduk { get; set; }
-    public int Stok { get; set; }
+
     public string? Gambar { get; set; }
     public string GambarSrc {
         get {
@@ -43,7 +42,6 @@ public class ProdukViewModel
             DeskripsiProduk = this.DeskripsiProduk,
             HargaProduk = this.HargaProduk,
             Gambar = this.Gambar ?? string.Empty,
-            Stok = this.Stok,
         };
     }
 }

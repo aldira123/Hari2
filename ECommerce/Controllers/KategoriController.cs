@@ -2,16 +2,12 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.Models;
 using eCommerce.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using eCommerce.Interface;
-using eCommerce.Datas.Entities;
 using eCommerce.Helpers;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 
 namespace eCommerce.Controllers;
-
-[Authorize]
+[Authorize(Roles = AppConstant.ADMIN)]
 
 public class KategoriController : Controller
 {
@@ -19,7 +15,7 @@ public class KategoriController : Controller
     private readonly ILogger<KategoriController> _logger;
     private readonly IWebHostEnvironment _iWebHost;
 
-    public KategoriController(ILogger<KategoriController> logger, 
+    public KategoriController(ILogger<KategoriController> logger,
     IKategoriService kategoriService, IWebHostEnvironment iWebHost)
     {
         _logger = logger;
@@ -36,47 +32,55 @@ public class KategoriController : Controller
         for (int i = 0; i < dbResult.Count; i++)
         {
             viewModels.Add(new KategoriViewModel
-                {
-                    IdKategori = dbResult[i].IdKategori,
-                    NamaKategori = dbResult[i].NamaKategori,
-                    DeskripsiKategori = dbResult[i].DeskripsiKategori,
-                    Icon = dbResult[i].Icon,
-                });
+            {
+                IdKategori = dbResult[i].IdKategori,
+                NamaKategori = dbResult[i].NamaKategori,
+                DeskripsiKategori = dbResult[i].DeskripsiKategori,
+                Icon = dbResult[i].Icon,
+            });
         }
 
         return View(viewModels);
     }
 
-    public async Task<IActionResult> Details(int? id) {
-       if (id == null){
-                return BadRequest();
-            }
-            var detail = await _kategoriService.Get(id.Value);
-             if (detail == null){
-                return NotFound();
-            }
-           return View(new KategoriViewModel(detail));
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        var detail = await _kategoriService.Get(id.Value);
+        if (detail == null)
+        {
+            return NotFound();
+        }
+        return View(new KategoriViewModel(detail));
     }
 
-    public IActionResult Create() {
+    public IActionResult Create()
+    {
         return View(new KategoriViewModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(KategoriViewModel request) {
-        if(!ModelState.IsValid){
+    public async Task<IActionResult> Create(KategoriViewModel request)
+    {
+        if (!ModelState.IsValid)
+        {
             return View(request);
         }
-        try{
-             string fileName = string.Empty;
-            
-            if(request.IconFile != null) 
+        try
+        {
+            string fileName = string.Empty;
+
+            if (request.IconFile != null)
             {
                 fileName = $"{Guid.NewGuid()}-{request.IconFile?.FileName}";
 
                 string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
-                
-                using(var streamWriter = System.IO.File.Create(filePathName)){
+
+                using (var streamWriter = System.IO.File.Create(filePathName))
+                {
                     // await streamWriter.WriteAsync(Common.StreamToBytes(request.IconFile.OpenReadStream()));
                     //using extension to convert stream to bytes
                     await streamWriter.WriteAsync(request.IconFile.OpenReadStream().ToBytes());
@@ -88,11 +92,14 @@ public class KategoriController : Controller
 
             await _kategoriService.Add(kategori);
 
-            return Redirect(nameof(Index));   
-        }catch(InvalidOperationException ex){
+            return Redirect(nameof(Index));
+        }
+        catch (InvalidOperationException ex)
+        {
             ViewBag.ErrorMessage = ex.Message;
         }
-        catch(Exception) {
+        catch (Exception)
+        {
             throw;
         }
 
@@ -100,90 +107,122 @@ public class KategoriController : Controller
     }
 
     public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
         {
-            if (id == null){
-                return BadRequest();
-            }
-            var update = await _kategoriService.Get(id.Value);
-             if (update == null){
-                return NotFound();
-            }
-           return View(new KategoriViewModel(update));
-            
+            return BadRequest();
+        }
+        var update = await _kategoriService.Get(id.Value);
+        if (update == null)
+        {
+            return NotFound();
+        }
+        return View(new KategoriViewModel(update));
+
+    }
+
+    // POST: KategoriProduks/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int? id, KategoriViewModel request)
+    {
+        if (id == null)
+        {
+            return BadRequest();
         }
 
-        // POST: KategoriProduks/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, KategoriViewModel request)
+        if (!ModelState.IsValid)
         {
-             if (id == null){
-                return BadRequest();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
-            try
-            {
-                 await _kategoriService.Update(request.ConvertToDbModel());
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (InvalidOperationException ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
             return View(request);
         }
 
-         // GET: KategoriProduks/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        try
         {
-            if (id == null){
-                return BadRequest();
+            string fileName = string.Empty;
+
+            if (request.IconFile != null)
+            {
+                fileName = $"{Guid.NewGuid()}-{request.IconFile?.FileName}";
+
+                string filePathName = _iWebHost.WebRootPath + $"/images/{fileName}";
+
+                using (var streamWriter = System.IO.File.Create(filePathName))
+                {
+                    // await streamWriter.WriteAsync(Common.StreamToBytes(request.IconFile.OpenReadStream()));
+                    //using extension to convert stream to bytes
+                    await streamWriter.WriteAsync(request.IconFile.OpenReadStream().ToBytes());
+
+                }
             }
-            var delete = await _kategoriService.Get(id.Value);
-             if (delete == null){
-                return NotFound();
+            var kategori = request.ConvertToDbModel();
+
+            if (request.IconFile != null)
+            {
+                kategori.Icon = $"images/{fileName}";
             }
-           return View(new KategoriViewModel(delete));
+
+
+
+            await _kategoriService.Update(kategori);
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch (InvalidOperationException ex)
+        {
+            ViewBag.ErrorMessage = ex.Message;
+        }
+        catch (Exception)
+        {
+            throw;
         }
 
-        // POST: KategoriProduks/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int? id, KategoriViewModel request)
+        return View(request);
+    }
+
+    // GET: KategoriProduks/Delete/5
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
         {
-            if (id == null )
-            {
-                return BadRequest();
-            }
-            try
-            {
-                await _kategoriService.Delete(id.Value);
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (InvalidOperationException ex)
-            {
-                ViewBag.ErrorMessage = ex.Message;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-            return View(request);
+            return BadRequest();
         }
+        var delete = await _kategoriService.Get(id.Value);
+        if (delete == null)
+        {
+            return NotFound();
+        }
+        return View(new KategoriViewModel(delete));
+    }
+
+    // POST: KategoriProduks/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int? id, KategoriViewModel request)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        try
+        {
+            await _kategoriService.Delete(id.Value);
+
+            return RedirectToAction(nameof(Index));
+        }
+        catch (InvalidOperationException ex)
+        {
+            ViewBag.ErrorMessage = ex.Message;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+        return View(request);
+    }
 
     public IActionResult Privacy()
     {

@@ -9,17 +9,38 @@ namespace eCommerce.Services;
 public class KeranjangService : BaseDbService, IKeranjangService
 {
     private readonly IProdukService _produkService;
-    public KeranjangService(eCommerceDbContext dbContext) : base(dbContext)
+    public KeranjangService(eCommerceDbContext dbContext, IProdukService produkService) : base(dbContext)
     {
+        _produkService = produkService;
     }
 
     public async Task<Keranjang> Add(Keranjang obj)
     {
-       if(await DbContext.Keranjangs.AnyAsync(x=>x.IdProduk == obj.IdProduk && x.IdCustomer == obj.IdCustomer)){
-           return obj;
-       }
+       if(await DbContext.Keranjangs.AnyAsync(x=>x.IdProduk == obj.IdProduk && x.IdCustomer == obj.IdCustomer))
+        {
+            return obj;
+        }
 
-       return obj;
+        //get data produk
+        var produk = await _produkService.Get(obj.IdProduk);
+
+        if(produk == null)
+        {
+            throw new InvalidOperationException("Produk tidak ditemukan");
+        }
+
+        if(obj.JumlahBarang < 1) 
+        {
+            obj.JumlahBarang = 1;
+        }
+
+        //rumus subtotal = harga * jumlah produk
+        obj.Subtotal = produk.HargaProduk * obj.JumlahBarang;
+
+        await DbContext.AddAsync(obj);
+        await DbContext.SaveChangesAsync();
+
+        return obj;
     }
 
     public async Task<bool> Delete(int id)

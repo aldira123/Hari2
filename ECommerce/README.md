@@ -26,3 +26,7 @@
 ![DetailProduk](https://user-images.githubusercontent.com/102128920/161178350-9a4c9e2b-6285-43dc-a8a2-c69b703f65d4.png)
 # Keranjang
 ![Keranjang](https://user-images.githubusercontent.com/102128920/161182189-c5e79d0c-8053-4565-a071-293a67071184.png)
+# Alamat
+![Alamat](https://user-images.githubusercontent.com/102128920/161435117-4469a46f-2a3f-4c5a-a96a-4a88acc6e3a8.png)
+#List Pesanan
+![ListPesanan](https://user-images.githubusercontent.com/102128920/161435123-84e1094b-f677-44db-b89a-df193b75052f.png)

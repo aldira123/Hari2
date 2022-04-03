@@ -1,0 +1,58 @@
+@model eCommerce.ViewModels.AlamatViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_CustomerHomeLayout";
+}
+<div class="featured-page">
+ <div class="container">
+
+<div class="card mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Alamat</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <div class="form-group">
+                <label asp-for="Kecamatan" class="control-label">Kecamatan</label>
+                <input asp-for="Kecamatan" class="form-control" />
+                <span asp-validation-for="Kecamatan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kelurahan" class="control-label">Kelurahan</label>
+                <input asp-for="Kelurahan" class="form-control" />
+                <span asp-validation-for="Kelurahan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rt" class="control-label">RT</label>
+                <input asp-for="Rt" class="form-control" />
+                <span asp-validation-for="Rt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rw" class="control-label">RW</label>
+                <input asp-for="Rw" class="form-control" />
+                <span asp-validation-for="Rw" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KodePos" class="control-label">Kode Pos</label>
+                <input asp-for="KodePos" class="form-control" />
+                <span asp-validation-for="KodePos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Detail" class="control-label">Detail</label>
+                <input asp-for="Detail" class="form-control" />
+                <span asp-validation-for="Detail" class="text-danger"></span>
+            </div>
+           
+            <button type="submit" value="Create" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+</div>
+</div>
+</div>
+     
+
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

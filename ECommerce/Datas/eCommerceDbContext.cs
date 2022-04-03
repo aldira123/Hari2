@@ -28,6 +28,7 @@ namespace eCommerce.Datas
         public virtual DbSet<Produk> Produks { get; set; } = null!;
         public virtual DbSet<ProdukKategori> ProdukKategoris { get; set; } = null!;
         public virtual DbSet<StatusOrder> StatusOrders { get; set; } = null!;
+        public virtual DbSet<DetailOrder> DetailOrders { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -225,6 +226,44 @@ namespace eCommerce.Datas
                     .HasConstraintName("FK__produk_keranjang");
             });
 
+            modelBuilder.Entity<DetailOrder>(entity => {
+                
+                entity.ToTable("detail_order");
+                entity.HasKey(e => e.IdDetail)
+                    .HasName("PRIMARY");
+
+                entity.HasIndex(e => e.IdOrder, "detail_order_FK_1");
+
+                entity.Property(e => e.IdDetail)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_detail");
+
+                entity.Property(e => e.IdOrder)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_order");
+
+                entity.Property(e => e.IdProduk)
+                .HasColumnType("int(11)")
+                .HasColumnName("id_produk");
+
+                 entity.Property(e => e.Harga)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("harga");
+                
+                entity.Property(e => e.JumlahBarang)
+                .HasColumnType("int(11)")
+                .HasColumnName("jumlah_barang");
+                
+                entity.Property(e => e.SubTotal).HasColumnName("subtotal")
+                .HasPrecision(10,2);
+                
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.DetailOrders)
+                    .HasForeignKey(d => d.IdOrder)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("detail_order_FK_1");
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.IdOrder)
@@ -235,8 +274,6 @@ namespace eCommerce.Datas
                 entity.HasIndex(e => e.IdAlamat, "FK__alamat");
 
                 entity.HasIndex(e => e.IdCustomer, "FK__customer_order");
-
-                entity.HasIndex(e => e.IdKeranjang, "FK__keranjang");
 
                 entity.HasIndex(e => e.Status, "FK_order_status_order");
 
@@ -255,10 +292,6 @@ namespace eCommerce.Datas
                 entity.Property(e => e.IdCustomer)
                     .HasColumnType("int(11)")
                     .HasColumnName("id_customer");
-
-                entity.Property(e => e.IdKeranjang)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id_keranjang");
 
                 entity.Property(e => e.JumlahBayar)
                     .HasPrecision(10, 2)
@@ -281,12 +314,6 @@ namespace eCommerce.Datas
                     .HasForeignKey(d => d.IdCustomer)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__customer_order");
-
-                entity.HasOne(d => d.IdKeranjangNavigation)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.IdKeranjang)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__keranjang");
 
                 entity.HasOne(d => d.StatusNavigation)
                     .WithMany(p => p.Orders)

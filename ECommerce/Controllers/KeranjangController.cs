@@ -34,7 +34,8 @@ public class KeranjangController : Controller
 
     public async Task<IActionResult> Index(){
 
-        var result = await _keranjangService.Get(HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt());
+        var result = await _keranjangService.Get
+        (HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt());
         
         return View(result);
     }
@@ -52,10 +53,10 @@ public class KeranjangController : Controller
         await _keranjangService.Add(new Datas.Entities.Keranjang
         {
             IdProduk = produkId.Value,
-            JumlahBarang = 1,
-            IdCustomer = HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt()
+            // JumlahBarang = JumlahBarang,
+            IdCustomer = HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt(),
         });
-
+        
         return RedirectToAction(nameof(Index));
     }
  

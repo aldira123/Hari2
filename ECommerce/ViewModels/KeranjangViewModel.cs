@@ -14,6 +14,7 @@ namespace eCommerce.ViewModels
         public int IdCustomer { get; set; }
         public int JumlahBarang { get; set; }
         public decimal Subtotal { get; set; }
+        public decimal HargaBarang { get; set; }
 
     }
 }

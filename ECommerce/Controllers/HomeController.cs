@@ -86,10 +86,29 @@ public class HomeController : Controller
             return View(viewModels);
     }
 
+    //page = Halaman
+    //PageCount = Jumlah data yang ditampilkan per halaman
     public async Task<IActionResult> Kategori(int? page, int? pageCount)
     {
          var viewModels = new List<KategoriCustomerViewModel>();
-         var dbResult = await _kategoriService.Get(pageCount??10, (page??1 - 1) * (pageCount??10), string.Empty);
+         //Nilai limit +2
+         int limit = pageCount ?? 2;
+         int offset = 0;
+         if(page == null){
+             offset = 0;
+         }else {
+             offset = (page.Value - 1) * limit;
+         }
+         var dbResult = await _kategoriService.Get(limit, offset, string.Empty);
+
+         if(dbResult == null || !dbResult.Any())
+        {
+            return RedirectToAction(nameof(Kategori), new {
+                page = page > 1 ? page - 1 : 1,
+                pageCount = pageCount
+            });
+        }
+
             
 
             for (int i = 0; i < dbResult.Count; i++)
@@ -101,6 +120,7 @@ public class HomeController : Controller
                     Icon = dbResult[i].Icon,
                 });
             }
+            ViewBag.HalamanSekarang = page ?? 1;
             return View(viewModels);
     }
 

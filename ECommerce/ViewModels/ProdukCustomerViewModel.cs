@@ -25,6 +25,7 @@ public class ProdukCustomerViewModel
 
     public decimal HargaProduk { get; set; }
     public string? Gambar { get; set; } 
+    public int JumlahBarang {get; set;}
     public List<KategoriViewModel> Kategories { get; set; }
 
     public Produk ConvertToDbModel(){

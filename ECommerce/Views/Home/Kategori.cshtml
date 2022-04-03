@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_CustomerHomeLayout";
+    int halamanSekarang = ViewBag.HalamanSekarang ?? 1;
 }
 <!-- Items Starts Here -->
     <div class="featured-page">
@@ -38,5 +39,8 @@
              }
         </div>
     </div>
+     @Html.Partial("_PageNation")
+
+
 
  

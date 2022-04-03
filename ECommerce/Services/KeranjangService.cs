@@ -32,6 +32,8 @@ public class KeranjangService : BaseDbService, IKeranjangService
         if(obj.JumlahBarang < 1) 
         {
             obj.JumlahBarang = 1;
+        }else{
+            obj.JumlahBarang = obj.JumlahBarang;
         }
 
         //rumus subtotal = harga * jumlah produk
@@ -126,9 +128,16 @@ public class KeranjangService : BaseDbService, IKeranjangService
             Image = b.Gambar,
             JumlahBarang  = a.JumlahBarang,
             Subtotal  = a.Subtotal,
-            NamaProduk = b.NamaProduk
+            NamaProduk = b.NamaProduk,
+            HargaBarang = b.HargaProduk
         }).ToListAsync();
 
         return result;
+    }
+
+    public async Task Clear(int idCustomer)
+    {
+        DbContext.RemoveRange(DbContext.Keranjangs.Where(x=>x.IdCustomer == idCustomer));
+        await DbContext.SaveChangesAsync();
     }
 }

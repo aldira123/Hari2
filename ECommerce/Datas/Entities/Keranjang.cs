@@ -7,7 +7,7 @@ namespace eCommerce.Datas.Entities
     {
         public Keranjang()
         {
-            Orders = new HashSet<Order>();
+
         }
 
         public int IdKeranjang { get; set; }
@@ -18,6 +18,6 @@ namespace eCommerce.Datas.Entities
 
         public virtual Customer IdCustomerNavigation { get; set; } = null!;
         public virtual Produk IdProdukNavigation { get; set; } = null!;
-        public virtual ICollection<Order> Orders { get; set; }
+
     }
 }

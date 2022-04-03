@@ -28,10 +28,11 @@
                     <p>@Model.DeskripsiProduk </p>
                     <span>Stok : @Model.Stok</span>
                     <form asp-action="Add" asp-controller="Keranjang" method="post">
-                        <label for="quantity">Quantity:</label>
-                        <input name="quantity" type="quantity" class="quantity-text" id="quantity"
-                            onfocus="if(this.value == '1') { this.value = ''; }"
-                            onBlur="if(this.value == '') { this.value = '1';}" value="1">
+                        <label for="JumlahBarang">Quantity:</label>
+                        <input name="JumlahBarang" type="quantity" class="quantity-text" id="JumlahBarang"
+                        onfocus="if(this.value == '1') { this.value = ''; }" 
+                    onBlur="if(this.value == '') { this.value = '1';}"
+                    value="1">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="produkId" value="@Model.IdProduk" />
                         <input type="submit" class="button" value="Add To Cart!">

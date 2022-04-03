@@ -1,24 +1,23 @@
-@using System.Globalization
-@model List<eCommerce.ViewModels.KeranjangViewModel>
+
+@model IEnumerable<eCommerce.ViewModels.AlamatViewModel>
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_CustomerHomeLayout";
     int i = 0;
 }
+
 <div class="featured-page">
       <div class="container">
         <div class="row">
           <div class="col-md-4 col-sm-12">
             <div class="section-heading">
               <div class="line-dec"></div>
-              <h1>Keranjangmu</h1>
+              <h1>Alamatmu</h1>
             </div>
           </div>
           <div class="col-md-8 col-sm-12">
             <div id="filters" class="button-group">
-              <p>
-                Segera checkout Keranjangmu, sebelum kehabisan
-            </p>
+               <a asp-action="Create">Create New</a>
             </div>
           </div>
         </div>
@@ -29,10 +28,14 @@
                 <thead>
                     <tr class="text-nowrap">
                         <th>#</th>
-                        <th>Nama Produk</th>
-                        <th>Gambar</th>
-                        <th>Jumlah</th>
-                        <th>SubTotal</th>
+                        <th>Kecamatan</th>
+                        <th>kelurahan</th>
+                        <th>Rt</th>
+                        <th>Rw</th>
+                        <th>Kode Pos</th>
+                        <th>Detail</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,18 +44,18 @@
                         i++;
                         <tr>
                             <td>@i</td>
-                            <td>@item.NamaProduk</td>
-                            <td> <img src="~/@item.Image" height="100" /></td>
-                            <td>@item.JumlahBarang</td>
-                            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td>
+                            <td>@item.Kecamatan</td>
+                            <td>@item.Kelurahan</td>
+                            <td>@item.Rt</td>
+                            <td>@item.Rw</td>
+                            <td>@item.KodePos</td>
+                            <td>@item.Detail</td>
+                            <td><a asp-action="Edit" asp-route-id="@item.IdAlamat" class="btn btn-sm btn-primary">Edit</a></td>
+                        <td><a asp-action="Delete" asp-route-id="@item.IdAlamat" class="btn btn-sm btn-primary">Delete</a></td>
                         </tr>
                     }
                 </tbody>
             </table>
-
-            <form asp-controller="Order" asp-action="Checkout">
-                <button type="submit">Submit</button>
-            </form>
         </div>
     </div>
 </section>

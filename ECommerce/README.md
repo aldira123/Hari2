@@ -30,3 +30,6 @@
 ![Alamat](https://user-images.githubusercontent.com/102128920/161435117-4469a46f-2a3f-4c5a-a96a-4a88acc6e3a8.png)
 # List Pesanan
 ![ListPesanan](https://user-images.githubusercontent.com/102128920/161435123-84e1094b-f677-44db-b89a-df193b75052f.png)
+![DetailOrder](https://user-images.githubusercontent.com/102128920/161464478-f26e0c7e-3b6c-43ea-bad8-64f035a74717.png)
+
+

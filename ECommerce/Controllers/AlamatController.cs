@@ -35,7 +35,7 @@ public class AlamatController : Controller
 
     public async Task<IActionResult> Index(){
 
-        var result = await _alamatService.Get
+        var result = await _alamatService.GetId
         (HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt());
         
         return View(result);
@@ -68,7 +68,7 @@ public class AlamatController : Controller
 
             });
 
-            return Redirect(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
         catch (InvalidOperationException ex)
         {
@@ -83,20 +83,20 @@ public class AlamatController : Controller
     }
 
 
-    //  public async Task<IActionResult> Edit(int? id)
-    // {
-    //     if (id == null)
-    //     {
-    //         return BadRequest();
-    //     }
-    //     var update = await _alamatService.Get()
-    //     if (update == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     return View(new AlamatViewModel(update));
+     public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        var update = await _alamatService.Get(id.Value);
+        if (update == null)
+        {
+            return NotFound();
+        }
+        return View(new AlamatViewModel(update));
 
-    // }
+    }
 
     
     [HttpPost]
@@ -118,20 +118,6 @@ public class AlamatController : Controller
         {
             var alamat = request.ConvertToDbModel();
             await _alamatService.Update(alamat);
-            
-            // await _alamatService.Update(new Datas.Entities.Alamat{
-            //     IdAlamat = request.IdAlamat,
-            //     IdCustomer =  HttpContext.User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.NameIdentifier).Value.ToInt(),
-            //     Kecamatan = request.Kecamatan,
-            //     Kelurahan = request.Kelurahan,
-            //     Rt = request.Rt,
-            //     Rw = request.Rw,
-            //     KodePos = request.KodePos,
-            //    Detail= request.Detail,
-
-            // });
-
-
             return RedirectToAction(nameof(Index));
         }
         catch (InvalidOperationException ex)
@@ -146,24 +132,23 @@ public class AlamatController : Controller
         return View(request);
     }
 
-    //  public async Task<IActionResult> Delete(int? id)
-    // {
-    //     if (id == null)
-    //     {
-    //         return BadRequest();
-    //     }
-    //     var delete = await _alamatService.Get(id.Value);
-    //     if (delete == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     return View(new KategoriViewModel(delete));
-    // }
+     public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return BadRequest();
+        }
+        var delete = await _alamatService.Get(id.Value);
+        if (delete == null)
+        {
+            return NotFound();
+        }
+        return View(new AlamatViewModel(delete));
+    }
 
-    // POST: KategoriProduks/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int? id, KategoriViewModel request)
+    public async Task<IActionResult> Delete(int? id, AlamatViewModel request)
     {
         if (id == null)
         {

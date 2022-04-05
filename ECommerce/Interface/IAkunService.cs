@@ -7,5 +7,6 @@ namespace eCommerce.Interface
         Task<Admin> Login(string username, string password);
         Task<Customer> Register(RegisterViewModel request);
          Task<Customer> LoginCustomer(string username, string password);
+         Task<List<Tuple<int, string>>> GetAlamat(int idCustomer); 
     }
 }

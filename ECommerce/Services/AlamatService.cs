@@ -97,7 +97,7 @@ public class AlamatService : BaseDbService, IAlamatService
         return alamat;
     }
 
-    async Task<List<AlamatViewModel>> IAlamatService.Get(int idCustomer)
+    async Task<List<AlamatViewModel>> IAlamatService.GetId(int idCustomer)
     {
         var result = await (from a in DbContext.Alamats where a.IdCustomer == idCustomer
         select new AlamatViewModel 

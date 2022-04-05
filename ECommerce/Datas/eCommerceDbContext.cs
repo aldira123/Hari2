@@ -301,7 +301,9 @@ namespace eCommerce.Datas
                     .HasColumnType("int(11)")
                     .HasColumnName("status");
 
-                entity.Property(e => e.TglTransaksi).HasColumnName("tgl_transaksi");
+                entity.Property(e => e.TglTransaksi)
+                .HasColumnType("datetime")
+                .HasColumnName("tgl_transaksi");
 
                 entity.HasOne(d => d.IdAlamatNavigation)
                     .WithMany(p => p.Orders)

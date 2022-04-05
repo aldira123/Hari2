@@ -2,17 +2,15 @@
 @model List<eCommerce.ViewModels.KeranjangViewModel>
 @{
     ViewData["Title"] = "Checkout Berhasil";
-     Layout = "_CustomerHomeLayout";
+    Layout = "_CustomerHomeLayout";
 }
 <div class="featured-page">
-      <div class="container">
-          <p>
-              Pesanan anda sudah diterima
+    <div class="container">
+        <p>
+            Pesanan anda sudah diterima
 
-@Html.ActionLink("Pesanan saya", "Index", "Order");
+            @Html.ActionLink("Pesanan saya", "Index", "Order");
 
-          </p>
-      </div>
+        </p>
+    </div>
 </div>
-
-

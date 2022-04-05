@@ -4,7 +4,7 @@ namespace eCommerce.ViewModels
     {
         public KeranjangViewModel()
         {
-        
+            
         }
 
         public int IdKeranjang { get; set; }
@@ -15,6 +15,10 @@ namespace eCommerce.ViewModels
         public int JumlahBarang { get; set; }
         public decimal Subtotal { get; set; }
         public decimal HargaBarang { get; set; }
+        public int Alamat{get;set;}
+
+        
+
 
     }
 }

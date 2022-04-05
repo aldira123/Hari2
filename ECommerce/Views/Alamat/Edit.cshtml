@@ -13,6 +13,8 @@
     </div>
     <div class="card-body">
         <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdAlamat" />
             <div class="form-group">
                 <label asp-for="Kecamatan" class="control-label">Kecamatan</label>
                 <input asp-for="Kecamatan" class="form-control" />

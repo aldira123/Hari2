@@ -51,7 +51,7 @@
                             <td>@item.KodePos</td>
                             <td>@item.Detail</td>
                             <td><a asp-action="Edit" asp-route-id="@item.IdAlamat" class="btn btn-sm btn-primary">Edit</a></td>
-                        <td><a asp-action="Delete" asp-route-id="@item.IdAlamat" class="btn btn-sm btn-primary">Delete</a></td>
+                        <td><a class="btn-delete" data-id="@item.IdAlamat">Delete</a></td>
                         </tr>
                     }
                 </tbody>
@@ -59,3 +59,19 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function(){
+            //Show modal for delete confirmation
+            $(document).on("click", ".btn-delete", function () {
+            
+                var id = $(this).data('id');
+                console.log('id alamat: ' + id);
+                //ubah value yang id = itemId yang ada di dalam class .modal-body
+                $(".modal-body #itemId").val(id);
+                //tampilkan modal/dialog
+                $("#confirmDelete").modal('show');
+            });
+        });
+    </script>
+}

@@ -4,6 +4,6 @@ namespace eCommerce.Interface
 {
     public interface IAlamatService : ICrudService<Alamat>
     {
-         Task<List<AlamatViewModel>> Get(int idCustomer);
+         Task<List<AlamatViewModel>> GetId(int idCustomer);
     }
 }

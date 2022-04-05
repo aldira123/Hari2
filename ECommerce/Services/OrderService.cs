@@ -23,27 +23,27 @@ public class OrderService : BaseDbService, IOrderService
      async Task<List<OrderViewModel>> IOrderService.Get(int idCustomer)
     {
         //Inner Join
-        var result = await (from a in DbContext.DetailOrders
-        join b in DbContext.Produks on a.IdProduk equals b.IdProduk
-        join c in DbContext.Orders on a.IdOrder equals c.IdOrder 
-        join d in DbContext.StatusOrders on c.Status equals d.IdStatus
-        where c.IdCustomer == idCustomer
+        var result = await (from a in DbContext.Orders
+        join b in DbContext.StatusOrders on a.Status equals b.IdStatus
+        where a.IdCustomer == idCustomer
         select new OrderViewModel 
         {
            IdOrder = a.IdOrder,
-           TglTransaksi = c.TglTransaksi,
-           JumlahBayar = c.JumlahBayar,
-           Status = d.Nama,
-           Gambar = b.Gambar,
-           NamaProduk = b.NamaProduk,
-           Subtotal = a.SubTotal,
-           quantity = a.JumlahBarang,
-           HargaBarang = b.HargaProduk
+           Status = b.Nama,
+           TglTransaksi = a.TglTransaksi,
+           JumlahBayar = a.JumlahBayar,
+           Details = (from c in DbContext.DetailOrders
+           join d in DbContext.Produks on c.IdProduk equals d.IdProduk
+           where c.IdOrder == a.IdOrder
+           select new OrderDetailViewModel{
+               IdOrder = c.IdOrder,
+               NamaProduk = d.NamaProduk,
+               HargaBarang = d.HargaProduk,
+               Quantity = c.JumlahBarang,
+               Subtotal = c.SubTotal
+           }).ToList()    
         }).ToListAsync();
-
         return result;
     }
-
-        
     }
 }

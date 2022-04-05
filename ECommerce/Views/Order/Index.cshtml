@@ -30,11 +30,7 @@
                 <thead>
                     <tr class="text-nowrap">
                         <th>#</th>
-                        <th>Nama Produk</th>
-                        <th>Gambar</th>
-                        <th>Harga</th>
-                        <th>Quantity</th>
-                        <th>Sub Total</th>
+                        <th>Id Order</th>
                         <th>Tanggal Order</th>
                         <th>Total Bayar</th>
                         <th>Status</th>
@@ -46,11 +42,16 @@
                         i++;
                         <tr>
                             <td>@i</td>
-                            <td>@item.NamaProduk</td>
+                            <td>@item.IdOrder</td>
+                            @* <td> @foreach (var order in item.Details)
+                                            {
+                                                <p>@order.IdOrder</p>
+                                            }</td> *@
+                            @* <td>@item.NamaProduk</td>
                             <td> <img src="~/@item.Gambar" height="100" /></td>
                             <td>@item.HargaBarang.ToString("C", new CultureInfo("id-ID"))</td>
                             <td>@item.quantity</td>
-                            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td>
+                            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td> *@
                             <td>@item.TglTransaksi</td>
                             <td>@item.JumlahBayar</td>
                             <td>@item.Status</td>
@@ -58,10 +59,6 @@
                     }
                 </tbody>
             </table>
-
-            <form asp-controller="Order" asp-action="Checkout">
-                <button type="submit">Submit</button>
-            </form>
         </div>
     </div>
 </section>

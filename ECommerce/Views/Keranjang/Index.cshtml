@@ -24,6 +24,7 @@
     </div>
   </div>
 </div>
+<form asp-controller="Order" asp-action="Checkout">
 <div class="row">
   <table class="table">
     <thead>
@@ -55,10 +56,9 @@
 
     <label>Pilih Alamat Pengiriman</label>
             <select name="Alamat" asp-items="@ViewBag.AlamatDataSource"></select>
-                <br />       
-  <form asp-controller="Order" asp-action="Checkout">
-    <button type="submit">Submit</button>
-  </form>
+                <br />   
+               <button type="submit">Submit</button>
+                </form>    
 </div>
 </div>
 </section>

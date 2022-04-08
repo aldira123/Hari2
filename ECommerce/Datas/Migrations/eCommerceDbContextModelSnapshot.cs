@@ -308,8 +308,8 @@ namespace eCommerce.Datas.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("status");
 
-                    b.Property<DateOnly>("TglTransaksi")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("TglTransaksi")
+                        .HasColumnType("datetime")
                         .HasColumnName("tgl_transaksi");
 
                     b.HasKey("IdOrder")
@@ -329,6 +329,16 @@ namespace eCommerce.Datas.Migrations
                     b.Property<int>("IdPembayaran")
                         .HasColumnType("int(11)")
                         .HasColumnName("id_pembayaran");
+
+                    b.Property<string>("BuktiPembayaran")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("bukti_pembayaran");
+
+                    b.Property<string>("Catatan")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("catatan");
 
                     b.Property<int>("IdCustomer")
                         .HasColumnType("int(11)")
@@ -354,9 +364,14 @@ namespace eCommerce.Datas.Migrations
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("pajak");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int(11)")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("status");
+
+                    b.Property<int?>("StatusOrderIdStatus")
+                        .HasColumnType("int(11)");
 
                     b.Property<DateOnly>("TanggalBayar")
                         .HasColumnType("date")
@@ -370,6 +385,8 @@ namespace eCommerce.Datas.Migrations
 
                     b.HasKey("IdPembayaran")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("StatusOrderIdStatus");
 
                     b.HasIndex(new[] { "IdCustomer" }, "FK__customer_pembayaran");
 
@@ -409,23 +426,31 @@ namespace eCommerce.Datas.Migrations
                         .HasColumnName("kurir")
                         .HasDefaultValueSql("''");
 
+                    b.Property<string>("Noresi")
+                        .HasColumnType("longtext");
+
                     b.Property<decimal>("Ongkir")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("ongkir");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int(11)")
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("status");
+
+                    b.Property<int?>("StatusOrderIdStatus")
+                        .HasColumnType("int(11)");
 
                     b.HasKey("IdPengiriman")
                         .HasName("PRIMARY");
 
+                    b.HasIndex("StatusOrderIdStatus");
+
                     b.HasIndex(new[] { "IdAlamat" }, "FK__alamat_pengiriman");
 
                     b.HasIndex(new[] { "IdOrder" }, "FK__order_pengiriman");
-
-                    b.HasIndex(new[] { "Status" }, "FK_pengiriman_status_order");
 
                     b.ToTable("pengiriman", (string)null);
                 });
@@ -519,6 +544,47 @@ namespace eCommerce.Datas.Migrations
                     b.ToTable("status_order", (string)null);
                 });
 
+            modelBuilder.Entity("eCommerce.Datas.Entities.Ulasan", b =>
+                {
+                    b.Property<int>("IdUlasan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id_ulasan");
+
+                    b.Property<string>("Gambar")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("gambar");
+
+                    b.Property<int>("IdCustomer")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id_customer");
+
+                    b.Property<int>("IdOrder")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("id_order");
+
+                    b.Property<string>("Komentar")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)")
+                        .HasColumnName("komentar");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("rating");
+
+                    b.HasKey("IdUlasan")
+                        .HasName("PRIMARY");
+
+                    b.HasIndex(new[] { "IdOrder" }, "FK__Order_Ulasan");
+
+                    b.HasIndex(new[] { "IdCustomer" }, "FK__customer_Ulasan");
+
+                    b.ToTable("ulasan", (string)null);
+                });
+
             modelBuilder.Entity("eCommerce.Datas.Entities.Alamat", b =>
                 {
                     b.HasOne("eCommerce.Datas.Entities.Customer", "IdCustomerNavigation")
@@ -601,17 +667,13 @@ namespace eCommerce.Datas.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__order_pembayaran");
 
-                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", "StatusNavigation")
+                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", null)
                         .WithMany("Pembayarans")
-                        .HasForeignKey("Status")
-                        .IsRequired()
-                        .HasConstraintName("FK_pembayaran_status_order");
+                        .HasForeignKey("StatusOrderIdStatus");
 
                     b.Navigation("IdCustomerNavigation");
 
                     b.Navigation("IdOrderNavigation");
-
-                    b.Navigation("StatusNavigation");
                 });
 
             modelBuilder.Entity("eCommerce.Datas.Entities.Pengiriman", b =>
@@ -628,17 +690,13 @@ namespace eCommerce.Datas.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__order_pengiriman");
 
-                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", "StatusNavigation")
+                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", null)
                         .WithMany("Pengirimen")
-                        .HasForeignKey("Status")
-                        .IsRequired()
-                        .HasConstraintName("FK_pengiriman_status_order");
+                        .HasForeignKey("StatusOrderIdStatus");
 
                     b.Navigation("IdAlamatNavigation");
 
                     b.Navigation("IdOrderNavigation");
-
-                    b.Navigation("StatusNavigation");
                 });
 
             modelBuilder.Entity("eCommerce.Datas.Entities.ProdukKategori", b =>
@@ -660,6 +718,25 @@ namespace eCommerce.Datas.Migrations
                     b.Navigation("IdProdukNavigation");
                 });
 
+            modelBuilder.Entity("eCommerce.Datas.Entities.Ulasan", b =>
+                {
+                    b.HasOne("eCommerce.Datas.Entities.Customer", "Customer")
+                        .WithMany("Ulasans")
+                        .HasForeignKey("IdCustomer")
+                        .IsRequired()
+                        .HasConstraintName("FK__customer_Ulasan");
+
+                    b.HasOne("eCommerce.Datas.Entities.Order", "Order")
+                        .WithMany("Ulasans")
+                        .HasForeignKey("IdOrder")
+                        .IsRequired()
+                        .HasConstraintName("FK__Order_Ulasan");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("eCommerce.Datas.Entities.Alamat", b =>
                 {
                     b.Navigation("Orders");
@@ -676,6 +753,8 @@ namespace eCommerce.Datas.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Pembayarans");
+
+                    b.Navigation("Ulasans");
                 });
 
             modelBuilder.Entity("eCommerce.Datas.Entities.Kategori", b =>
@@ -690,6 +769,8 @@ namespace eCommerce.Datas.Migrations
                     b.Navigation("Pembayarans");
 
                     b.Navigation("Pengirimen");
+
+                    b.Navigation("Ulasans");
                 });
 
             modelBuilder.Entity("eCommerce.Datas.Entities.Produk", b =>

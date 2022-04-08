@@ -1,64 +1,85 @@
 @using System.Globalization
 @model List<eCommerce.ViewModels.OrderViewModel>
 @{
-    ViewData["Title"] = "Home Page";
-    Layout = "_CustomerHomeLayout";
-    int i = 0; 
+  ViewData["Title"] = "Home Page";
+  Layout = "_AdminLayout";
+  int i = 0;
 }
 
-<div class="featured-page">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="section-heading">
-              <div class="line-dec"></div>
-              <h1>Order</h1>
-            </div>
-          </div>
-          <div class="col-md-8 col-sm-12">
-            <div id="filters" class="button-group">
-              <p>
-               Pesanan Anda
-            </p>
-            </div>
-          </div>
+<div class="container-fluid" id="container-wrapper">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Order</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="./">Home</a></li>
+      <li class="breadcrumb-item">List</li>
+      <li class="breadcrumb-item active" aria-current="page">Order</li>
+    </ol>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 mb-4">
+      <!-- Simple Tables -->
+      <div class="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Order</h6>
         </div>
+
+        <div class="row">
+          <form asp-action="Index" asp-controller="Order">
+            <div class="col-md-4">
+              <input type="date" name="date" value="@ViewBag.FilterDate">@ViewBag.FilterDate</input>
+            </div>
+            <div class="col-md-4">
+              <select asp-items="@ViewBag.StatusList" name="status">
+
+              </select>
+            </div>
+            <div class="col-md-4">
+              <input type="submit" value="Cari" />
+            </div>
+          </form>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th>#</th>
+                <th>Id Order</th>
+                <th>Tanggal Order</th>
+                <th>Total Bayar</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (Model != null && Model.Any())
+              {
+                @foreach (var item in Model)
+                {
+                  i++;
+                  <tr>
+                    <td>@i</td>
+                    <td>@item.IdOrder</td>
+                    <td>@item.TglTransaksi</td>
+                    <td>@item.JumlahBayar</td>
+                    <td><span class="badge badge-info">@Html.ActionLink(item.Status, "DetailAdmin", "Order", new {
+                    id = item.IdOrder
+                    })</span></td>
+                  </tr>
+                }
+              }
+              else
+              {
+                <tr>
+                  <td colspan="4">Data kosong</td>
+                </tr>
+              }
+
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
       </div>
     </div>
-        <div class="row">
-            <table class="table">
-                <thead>
-                    <tr class="text-nowrap">
-                        <th>#</th>
-                        <th>Id Order</th>
-                        <th>Tanggal Order</th>
-                        <th>Total Bayar</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        i++;
-                        <tr>
-                            <td>@i</td>
-                            <td>@item.IdOrder</td>
-                            @* <td> @foreach (var order in item.Details)
-                                            {
-                                                <p>@order.IdOrder</p>
-                                            }</td> *@
-                            @* <td>@item.NamaProduk</td>
-                            <td> <img src="~/@item.Gambar" height="100" /></td>
-                            <td>@item.HargaBarang.ToString("C", new CultureInfo("id-ID"))</td>
-                            <td>@item.quantity</td>
-                            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td> *@
-                            <td>@item.TglTransaksi</td>
-                            <td>@item.JumlahBayar</td>
-                            <td>@item.Status</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
+  </div>
+  <!--Row-->

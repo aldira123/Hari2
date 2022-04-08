@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using eCommerce.Models;
 using eCommerce.Interface;
-using eCommerce.Datas;
+using eCommerce.Helpers;
 using eCommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace eCommerce.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IProdukService _produkService;
@@ -27,7 +27,16 @@ public class HomeController : Controller
 
     public async  Task<IActionResult> Produk(int? page, int? pageCount){
         var viewModels = new List<ProdukCustomerViewModel>();
-             var dbResult = await _produkService.Get(pageCount??10, (page??1 - 1) * (pageCount??10), string.Empty);
+        var tuplePagination = Common.ToLimitOffset(page, pageCount);
+        var dbResult = await _produkService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
+
+             if(dbResult == null || !dbResult.Any())
+        {
+            return RedirectToAction(nameof(Produk), new {
+                page = page > 1 ? page - 1 : 1,
+                pageCount = pageCount
+            });
+        }
 
             for (int i = 0; i < dbResult.Count; i++)
             {
@@ -46,25 +55,23 @@ public class HomeController : Controller
                     }).ToList()
                 });
             }
+            ViewBag.HalamanSekarang = page ?? 1;
             return View(viewModels);
-    }
-
-    public override void OnActionExecuted(ActionExecutedContext context)
-    {
-        if(HttpContext.User == null || HttpContext.User.Identity == null){
-            ViewBag.IsLogged = false;
-        } else {
-            ViewBag.IsLogged = HttpContext.User.Identity.IsAuthenticated;
-        }
-
-        base.OnActionExecuted(context);
     }
 
     public async Task<IActionResult> Index(int? page, int? pageCount)
     {
 
             var viewModels = new List<ProdukCustomerViewModel>();
-             var dbResult = await _produkService.Get(pageCount??10, (page??1 - 1) * (pageCount??10), string.Empty);
+             var dbResult = await _produkService.Get(pageCount??2, (page??1 - 1) * (pageCount??2), string.Empty);
+
+             if(dbResult == null || !dbResult.Any())
+        {
+            return RedirectToAction(nameof(Index), new {
+                page = page > 1 ? page - 1 : 1,
+                pageCount = pageCount
+            });
+        }
 
             for (int i = 0; i < dbResult.Count; i++)
             {
@@ -83,6 +90,7 @@ public class HomeController : Controller
                     }).ToList()
                 });
             }
+            ViewBag.HalamanSekarang = page ?? 1;
             return View(viewModels);
     }
 
@@ -91,15 +99,8 @@ public class HomeController : Controller
     public async Task<IActionResult> Kategori(int? page, int? pageCount)
     {
          var viewModels = new List<KategoriCustomerViewModel>();
-         //Nilai limit +2
-         int limit = pageCount ?? 2;
-         int offset = 0;
-         if(page == null){
-             offset = 0;
-         }else {
-             offset = (page.Value - 1) * limit;
-         }
-         var dbResult = await _kategoriService.Get(limit, offset, string.Empty);
+         var tuplePagination = Common.ToLimitOffset(page, pageCount);
+        var dbResult = await _kategoriService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
 
          if(dbResult == null || !dbResult.Any())
         {
@@ -108,8 +109,6 @@ public class HomeController : Controller
                 pageCount = pageCount
             });
         }
-
-            
 
             for (int i = 0; i < dbResult.Count; i++)
             {

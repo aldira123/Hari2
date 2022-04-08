@@ -18,9 +18,19 @@ namespace eCommerce.ViewModels
             }
         }
         public decimal JumlahBayar { get; set; }
+        public int IdStatus {get; set;}
         public string Status { get; set; }
+         public int IdAlamat { get; set; }
+        public string Alamat { get; set; }
+        public string NoHp {get; set;}
+        public string NamaCustomer {get; set;}
+    
 
         public List<OrderDetailViewModel> Details { get; set; }
+        public PembayaranViewModel Pembayaran {get; set; }
+        public PengirimanViewModel Pengiriman {get; set; }
+
+        public UlasanViewModel Ulasan {get; set; }
     
     }
 }

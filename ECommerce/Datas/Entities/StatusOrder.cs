@@ -8,8 +8,7 @@ namespace eCommerce.Datas.Entities
         public StatusOrder()
         {
             Orders = new HashSet<Order>();
-            Pembayarans = new HashSet<Pembayaran>();
-            Pengirimen = new HashSet<Pengiriman>();
+           
         }
 
         public int IdStatus { get; set; }
@@ -17,7 +16,6 @@ namespace eCommerce.Datas.Entities
         public string Deskripsi { get; set; } = null!;
 
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Pembayaran> Pembayarans { get; set; }
-        public virtual ICollection<Pengiriman> Pengirimen { get; set; }
+       
     }
 }

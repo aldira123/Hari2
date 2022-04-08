@@ -14,5 +14,6 @@ namespace eCommerce.ViewModels
     public int Alamat { get; set; }
     public string Action { get; set; }
     public string? Note { get; set; }
+    public string[] harga { get; set; }
     }
 }

@@ -1,8 +1,11 @@
-@using System.Globalization
+@using eCommerce.Helpers;
+@using eCommerce.ViewModels;
 @model IEnumerable<eCommerce.ViewModels.ProdukCustomerViewModel>
+
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_CustomerHomeLayout";
+    int halamanSekarang = ViewBag.HalamanSekarang ?? 1;
 }
 
 <!-- Items Starts Here -->
@@ -34,11 +37,21 @@
                     <h4><center>@Html.ActionLink(@item.NamaProduk, "ProdukDetail", "Home", new {
                             id = @item.IdProduk
                         })</center></h4>
-                    <p>@item.DeskripsiProduk</p>
-                    <h6><center>@item.HargaProduk.ToString("C", new CultureInfo("id-ID"))<center></h6>
+                    <p><center>@item.DeskripsiProduk</center></p>
+                    <h6><center>@item.HargaProduk.ToIDR()<center></h6>
                     </div>
                 </div>
              }
         </div>
-    </div>
-     @Html.Partial("_PageNation")
+
+           @{
+                Html.RenderPartial("_Pagination", new PaginationViewModel
+                {
+                    Action = "Produk",
+                    Controller = "Home",
+                    CurrentPage = halamanSekarang,
+                    TotalData = Model.Count()
+                });
+            }
+</div>
+    

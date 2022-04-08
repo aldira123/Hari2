@@ -24,8 +24,8 @@
     </div>
   </div>
 </div>
-<form asp-controller="Order" asp-action="Checkout">
 <div class="row">
+
   <table class="table">
     <thead>
       <tr class="text-nowrap">
@@ -34,6 +34,7 @@
         <th>Gambar</th>
         <th>Jumlah</th>
         <th>SubTotal</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -44,21 +45,68 @@
           <td>@i</td>
           <td>@item.IdProduk</td>
           <td> <img src="~/@item.Image" height="100" /></td>
-          <td>
-            <input type="hidden" name="Id" value="@item.IdKeranjang" />
-            <input type="number" name="Qty" value="@item.JumlahBarang" />
-          </td>
-          <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td>
+          <form asp-controller="Keranjang" asp-action="Edit" method="post">
+            <td>
+              <input type="hidden" name="IdProduk" value="@item.IdProduk" />
+              @* <input type="hidden" name="Harga" value="@item.HargaBarang" />  *@
+              <input type="number" name="JumlahBarang" value="@item.JumlahBarang" />
+            </td>
+            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td>
+            <td>
+              <button type="submit">Update</button>
+            </td>
+          </form>
+          <td><a asp-action="Delete" asp-route-id="@item.IdKeranjang" class="btn btn-sm btn-primary">Delete</a></td>
         </tr>
       }
     </tbody>
   </table>
-
+  <form asp-controller="Order" asp-action="Checkout">
+    @foreach (var item in Model)
+    {
+      <input type="hidden" name="Id" value="@item.IdKeranjang" />
+      <input type="hidden" name="Qty" value="@item.JumlahBarang" />
+    }
     <label>Pilih Alamat Pengiriman</label>
-            <select name="Alamat" asp-items="@ViewBag.AlamatDataSource"></select>
-                <br />   
-               <button type="submit">Submit</button>
-                </form>    
+    <select name="Alamat" asp-items="@ViewBag.AlamatDataSource"></select>
+    <br />
+    <button type="submit">Checkout</button>
+  </form>
 </div>
+
 </div>
 </section>
+
+@*
+  @section Scripts {
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="text/javascript">
+  $(document).ready(function () {
+  $("input[name='Qty']").on('change', function (e) {
+  let qty = $(this).val(),
+  harga = $(this).siblings("input[name='Harga']").val();
+  let id = $(this).siblings("input[name='Id']").val(),
+  base = $(this);
+  $.ajax({
+  url: "/Keranjang/Edit",
+  type: "post",
+  data: { IdKeranjang: id, JumlahBarang: qty },
+  dataType: "json",
+  success: function (response) {
+  if (response.success) {
+  console.log(response.message);
+  base.parent().siblings(".sub-tot").text(`Rp.${hitung(harga, qty)}`);
+  } else {
+  console.log(response.message);
+  }
+  }
+  })
+  })
+  const hitung = (harga, qty) => {
+  let total = parseFloat(harga) * parseFloat(qty);
+  var abc = new Intl.NumberFormat(['ban', 'id']).format(total);
+  return abc;
+  }
+  });
+  </script>
+  } *@

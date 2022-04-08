@@ -59,6 +59,7 @@ https://www.tooplate.com/view/2114-pixie
                               <ul>
                                 <li><a href="/Keranjang/Index">Keranjang</a></li>
                                  <li><a href="/Alamat/Index">Alamat</a></li>
+                                  <li><a href="/Order/MyOrder">Order</a></li>
                                     <li>
                                       <a  href="/Akun/Logout">  Logout</a></li>
                               </ul>
@@ -87,46 +88,11 @@ https://www.tooplate.com/view/2114-pixie
         </div>
     </header>
     <!-- ***** Header Area End ***** -->
-    @* <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-      <div class="container">
-        <a class="navbar-brand" href="#"><img src="~/Hometemp/assets/images/header-logo.png" alt=""></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/Home/Index">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Home/Produk">Produk</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/Home/Kategori">Kategori</a>
-            </li>
-            @if (ViewBag.IsLogged != null && ViewBag.IsLogged)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Keranjang"
-                                asp-action="Index">Keranjang</a>
-                            </li>
-                        }
-            <li class="nav-item">
-              <a class="nav-link" href="/Akun/Login">Admin</a>
-            </li>
-             <li class="nav-item">
-              <a class="nav-link" href="/Akun/LoginCustomer">User</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+   
+   
 
     <!-- Page Content -->
-     *@
+
 
     <div class="row mb-3">
                <div class="container">
@@ -160,6 +126,14 @@ https://www.tooplate.com/view/2114-pixie
     <!-- Additional Scripts -->
     <script src="assets/js/custom.js"></script>
     <script src="assets/js/owl.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+  <script src="~/template/vendor/jquery/jquery.min.js"></script>
+  <script src="~/template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="~/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="~/template/js/ruang-admin.min.js"></script>
+  <script src="~/template/vendor/chart.js/Chart.min.js"></script>
+  <script src="~/template/js/demo/chart-area-demo.js"></script> 
 
 
     <script language = "text/Javascript"> 
@@ -172,7 +146,7 @@ https://www.tooplate.com/view/2114-pixie
           }
       }
     </script>
-     @await RenderSectionAsync("Scripts", required: false)
+   
 
 
   </body>

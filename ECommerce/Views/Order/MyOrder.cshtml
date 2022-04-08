@@ -1,0 +1,57 @@
+@using System.Globalization
+@model List<eCommerce.ViewModels.OrderViewModel>
+@{
+  ViewData["Title"] = "Home Page";
+  Layout = "_CustomerHomeLayout";
+  int i = 0;
+}
+
+<div class="featured-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+        <div class="section-heading">
+          <div class="line-dec"></div>
+          <h1>Order</h1>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12">
+        <div id="filters" class="button-group">
+          <p>
+            Pesanan Anda
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <table class="table">
+    <thead>
+      <tr class="text-nowrap">
+        <th>#</th>
+        <th>Id Order</th>
+        <th>Tanggal Order</th>
+        <th>Total Bayar</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        i++;
+        <tr>
+          <td>@i</td>
+          <td>@item.IdOrder</td>
+          <td>@item.TglTransaksi</td>
+          <td>@item.JumlahBayar</td>
+          <td><span class="badge badge-info">@Html.ActionLink(item.Status, "DetailOrder", "Order", new {
+          id = item.IdOrder
+          })</span></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+</div>
+</section>

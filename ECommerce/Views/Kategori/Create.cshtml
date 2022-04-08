@@ -20,13 +20,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="DeskripsiKategori" class="control-label">Deskripsi Kategori</label>
-                <input asp-for="DeskripsiKategori" class="form-control" />
+                <input asp-for="DeskripsiKategori" class="custom-file-input" />
                 <span asp-validation-for="DeskripsiKategori" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IconFile" class="control-label"></label>
-                <input asp-for="IconFile" type="file" class="form-control" />
+                <div class="custom-file">
+                <label asp-for="IconFile" class="custom-file-label"></label>
+                <input asp-for="IconFile" type="file" class="custom-file-input" />
                 <span asp-validation-for="IconFile" class="text-danger"></span>
+                </div>
             </div>
             <button type="submit" value="Create" class="btn btn-primary">Submit</button>
         </form>

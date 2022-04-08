@@ -28,9 +28,12 @@
                 <span asp-validation-for="HargaProduk" class="text-danger"></span>
             </div>
              <div class="form-group">
-                <label asp-for="GambarFile" class="control-label">Gambar</label>
-                <input asp-for="GambarFile" type ="file" class="form-control" />
+                 <div class="custom-file">
+                 <label asp-for="GambarFile" class="custom-file-label">Gambar</label>
+                <input asp-for="GambarFile" type ="file" class="custom-file-input" />
                 <span asp-validation-for="GambarFile" class="text-danger"></span>
+                 </div>
+               
             </div>
             <div class="form-group">
                 <label asp-for="KategoriId" class="control-label"></label>

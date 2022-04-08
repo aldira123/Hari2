@@ -1,3 +1,4 @@
+using eCommerce.Datas.Entities;
 namespace eCommerce.ViewModels
 {
     public partial class KeranjangViewModel
@@ -6,6 +7,16 @@ namespace eCommerce.ViewModels
         {
             
         }
+
+        public KeranjangViewModel(Keranjang item)
+        {
+            IdKeranjang = item.IdKeranjang;
+            IdProduk = item.IdProduk;
+            IdCustomer = item.IdCustomer;
+            JumlahBarang = item.JumlahBarang;
+            Subtotal = item.Subtotal;
+        }
+
 
         public int IdKeranjang { get; set; }
         public int IdProduk { get; set; }
@@ -17,6 +28,17 @@ namespace eCommerce.ViewModels
         public decimal HargaBarang { get; set; }
         public int Alamat{get;set;}
 
+        public Keranjang ConvertToDbModel()
+        {
+            return new Keranjang
+            {
+                IdKeranjang = this.IdKeranjang,
+                IdProduk = this.IdProduk,
+                IdCustomer = this.IdCustomer,
+                JumlahBarang = this.JumlahBarang,
+                Subtotal = this.Subtotal,
+            };
+        }
         
 
 

@@ -82,6 +82,19 @@ public class KeranjangService : BaseDbService, IKeranjangService
         return result;
     }
 
+    public async Task<Keranjang?> GetProduk(int id)
+    {
+        var result = await DbContext.Keranjangs.FirstOrDefaultAsync(x=>x.IdProduk == id);
+       
+
+        if(result == null)
+        {
+            throw new InvalidOperationException($"Keranjang with ID {id} doesn't exist");
+        }
+
+        return result;
+    }
+
     public Task<Keranjang?> Get(Expression<Func<Keranjang, bool>> func)
     {
         throw new NotImplementedException();
@@ -94,17 +107,27 @@ public class KeranjangService : BaseDbService, IKeranjangService
 
     public async Task<Keranjang> Update(Keranjang obj)
     {
+        var Keranjang = await DbContext.Keranjangs.FirstOrDefaultAsync(x=>x.IdKeranjang == obj.IdKeranjang);
         if(obj == null)
         {
             throw new ArgumentNullException("Keranjang cannot be null");
         }
 
-        var Keranjang = await DbContext.Keranjangs.FirstOrDefaultAsync(x=>x.IdKeranjang == obj.IdKeranjang);
+        var produk = await _produkService.Get(obj.IdProduk);
+       
 
         if(Keranjang == null) {
             throw new InvalidOperationException($"Keranjang with ID {obj.IdKeranjang} doesn't exist in database");
         }
 
+         if(obj.JumlahBarang < 1) 
+        {
+            obj.JumlahBarang = 1;
+        }
+
+        Keranjang.IdProduk = produk.IdProduk;
+        Keranjang.JumlahBarang = obj.JumlahBarang;
+        Keranjang.Subtotal = produk.HargaProduk * Keranjang.JumlahBarang;
        
         DbContext.Update(Keranjang);
         await DbContext.SaveChangesAsync();
@@ -112,7 +135,7 @@ public class KeranjangService : BaseDbService, IKeranjangService
         return Keranjang;
     }
 
-    async Task<List<KeranjangViewModel>> IKeranjangService.Get(int idCustomer)
+    async Task<List<KeranjangViewModel>> IKeranjangService.GetId(int idCustomer)
     {
         //Inner Join
         var result = await (from a in DbContext.Keranjangs

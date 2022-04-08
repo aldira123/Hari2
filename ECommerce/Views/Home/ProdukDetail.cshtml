@@ -1,4 +1,4 @@
-@using System.Globalization
+@using eCommerce.Helpers
 @model eCommerce.ViewModels.ProdukCustomerViewModel
 @{
     ViewData["Title"] = "Home Page";
@@ -24,15 +24,12 @@
             <div class="col-md-6">
                 <div class="right-content">
                     <h4>@Model.NamaProduk</h4>
-                    <h6>@Model.HargaProduk.ToString("C", new CultureInfo("id-ID"))</h6>
+                    <h6>@Model.HargaProduk.ToIDR()</h6>
                     <p>@Model.DeskripsiProduk </p>
                     <span>Stok : @Model.Stok</span>
                     <form asp-action="Add" asp-controller="Keranjang" method="post">
                         <label for="JumlahBarang">Quantity:</label>
-                        <input name="JumlahBarang" type="quantity" class="quantity-text" id="JumlahBarang"
-                        onfocus="if(this.value == '1') { this.value = ''; }" 
-                    onBlur="if(this.value == '') { this.value = '1';}"
-                    value="1">
+                        <input name="JumlahBarang" type="quantity" class="quantity-text" id="JumlahBarang" value="@Model.JumlahBarang">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="produkId" value="@Model.IdProduk" />
                         <input type="submit" class="button" value="Add To Cart!">

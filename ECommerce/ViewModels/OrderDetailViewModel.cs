@@ -14,8 +14,11 @@ namespace eCommerce.ViewModels
         public decimal HargaBarang { get; set; }
         public int Quantity { get; set; }
         public decimal Subtotal { get; set; }
-          public string Gambar { get; set; }
+        public string Gambar { get; set; }
+        public string Struk { get; set; }
 
+        public IFormFile? GambarFile { get; set; }
 
+       
     }
 }

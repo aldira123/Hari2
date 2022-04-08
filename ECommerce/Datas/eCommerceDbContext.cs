@@ -29,6 +29,7 @@ namespace eCommerce.Datas
         public virtual DbSet<ProdukKategori> ProdukKategoris { get; set; } = null!;
         public virtual DbSet<StatusOrder> StatusOrders { get; set; } = null!;
         public virtual DbSet<DetailOrder> DetailOrders { get; set; } = null!;
+        public virtual DbSet<Ulasan> Ulasans { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,6 +67,53 @@ namespace eCommerce.Datas
                     entity.Property(e => e.Email)
                     .HasMaxLength(50)
                     .HasColumnName("email");
+            });
+            modelBuilder.Entity<Ulasan>(entity =>{
+                entity.HasKey(e => e.IdUlasan)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("ulasan");
+
+                entity.HasIndex(e => e.IdCustomer, "FK__customer_Ulasan");
+                entity.HasIndex(e => e.IdOrder, "FK__Order_Ulasan");
+
+                entity.Property(e => e.IdUlasan)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_ulasan");
+
+                entity.Property(e => e.IdOrder)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_order");
+
+                entity.Property(e => e.IdCustomer)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("id_customer");
+
+                entity.Property(e => e.Komentar)
+                    .HasMaxLength(1000)
+                    .HasColumnName("komentar");
+                
+                entity.Property(e => e.Gambar)
+                    .HasMaxLength(255)
+                    .HasColumnName("gambar");
+
+                entity.Property(e => e.Rating)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("rating");
+                
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Ulasans)
+                    .HasForeignKey(d => d.IdOrder)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Order_Ulasan");
+                
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Ulasans)
+                    .HasForeignKey(d => d.IdCustomer)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__customer_Ulasan");
+
+
             });
 
             modelBuilder.Entity<Alamat>(entity =>
@@ -335,8 +383,7 @@ namespace eCommerce.Datas
 
                 entity.HasIndex(e => e.IdOrder, "FK__order_pembayaran");
 
-                entity.HasIndex(e => e.Status, "FK_pembayaran_status_order");
-
+              
                 entity.Property(e => e.IdPembayaran)
                     .HasColumnType("int(11)")
                     .ValueGeneratedNever()
@@ -357,13 +404,17 @@ namespace eCommerce.Datas
                 entity.Property(e => e.MetodePembayaran)
                     .HasMaxLength(50)
                     .HasColumnName("metode_pembayaran");
+                
+                entity.Property(e => e.Catatan)
+                    .HasMaxLength(255)
+                    .HasColumnName("catatan");
 
                 entity.Property(e => e.Pajak)
                     .HasPrecision(10, 2)
                     .HasColumnName("pajak");
 
                 entity.Property(e => e.Status)
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(100)
                     .HasColumnName("status");
 
                 entity.Property(e => e.TanggalBayar).HasColumnName("tanggal_bayar");
@@ -371,6 +422,10 @@ namespace eCommerce.Datas
                 entity.Property(e => e.Tujuan)
                     .HasMaxLength(50)
                     .HasColumnName("tujuan");
+
+                entity.Property(e => e.BuktiPembayaran)
+                    .HasMaxLength(255)
+                    .HasColumnName("bukti_pembayaran");
 
                 entity.HasOne(d => d.IdCustomerNavigation)
                     .WithMany(p => p.Pembayarans)
@@ -384,11 +439,7 @@ namespace eCommerce.Datas
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__order_pembayaran");
 
-                entity.HasOne(d => d.StatusNavigation)
-                    .WithMany(p => p.Pembayarans)
-                    .HasForeignKey(d => d.Status)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_pembayaran_status_order");
+               
             });
 
             modelBuilder.Entity<Pengiriman>(entity =>
@@ -401,8 +452,6 @@ namespace eCommerce.Datas
                 entity.HasIndex(e => e.IdAlamat, "FK__alamat_pengiriman");
 
                 entity.HasIndex(e => e.IdOrder, "FK__order_pengiriman");
-
-                entity.HasIndex(e => e.Status, "FK_pengiriman_status_order");
 
                 entity.Property(e => e.IdPengiriman)
                     .HasColumnType("int(11)")
@@ -430,8 +479,12 @@ namespace eCommerce.Datas
                     .HasColumnName("ongkir");
 
                 entity.Property(e => e.Status)
-                    .HasColumnType("int(11)")
+                    .HasMaxLength(100)
                     .HasColumnName("status");
+
+                 entity.Property(e => e.Noresi)
+                    .HasMaxLength(100)
+                    .HasColumnName("no_resi");
 
                 entity.HasOne(d => d.IdAlamatNavigation)
                     .WithMany(p => p.Pengirimen)
@@ -445,11 +498,7 @@ namespace eCommerce.Datas
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__order_pengiriman");
 
-                entity.HasOne(d => d.StatusNavigation)
-                    .WithMany(p => p.Pengirimen)
-                    .HasForeignKey(d => d.Status)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_pengiriman_status_order");
+               
             });
 
             modelBuilder.Entity<Produk>(entity =>

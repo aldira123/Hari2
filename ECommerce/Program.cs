@@ -19,6 +19,7 @@ builder.Services.AddDbContext<eCommerceDbContext>(
                 .EnableDetailedErrors()
         );
 
+//Inject
 builder.Services.AddScoped<IKategoriService, KategoriService>();
 builder.Services.AddScoped<IProdukService, ProdukService>();
 builder.Services.AddScoped<IProdukKategoriService, ProdukKategoriService>();
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IKeranjangService, KeranjangService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAlamatService, AlamatService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

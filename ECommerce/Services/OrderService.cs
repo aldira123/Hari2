@@ -39,6 +39,7 @@ namespace eCommerce.Services
             //Inner Join
             join b in DbContext.StatusOrders on a.Status equals b.IdStatus
             join c in DbContext.Alamats on a.IdAlamat equals c.IdAlamat
+            join f in DbContext.Customers on a.IdCustomer equals f.IdCustomer
             //End Inner Join
 
             //Left Join
@@ -58,6 +59,8 @@ namespace eCommerce.Services
                 JumlahBayar = a.JumlahBayar,
                 IdAlamat = c.IdAlamat,
                 Alamat = c.Detail,
+                NamaCustomer = f.Nama,
+                NoHp = f.NoHp,
                 Details = (from c in DbContext.DetailOrders
                            join d in DbContext.Produks on c.IdProduk equals d.IdProduk
                            where c.IdOrder == a.IdOrder

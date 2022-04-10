@@ -1,57 +1,59 @@
-@using System.Globalization
+@using eCommerce.Helpers;
 @model List<eCommerce.ViewModels.OrderViewModel>
 @{
   ViewData["Title"] = "Home Page";
-  Layout = "_CustomerHomeLayout";
-  int i = 0;
+  Layout = "_CustomerLayout";
 }
 
-<div class="featured-page">
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+  <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+    <a href="/Home/Index" class="stext-109 cl8 hov-cl1 trans-04">
+      Home
+      <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+    </a>
+
+    <span class="stext-109 cl4">
+      My Order
+    </span>
+  </div>
+</div>
+
+
+<!-- Shoping Cart -->
+<div class="bg0 p-t-75 p-b-85">
   <div class="container">
     <div class="row">
-      <div class="col-md-4 col-sm-12">
-        <div class="section-heading">
-          <div class="line-dec"></div>
-          <h1>Order</h1>
-        </div>
-      </div>
-      <div class="col-md-8 col-sm-12">
-        <div id="filters" class="button-group">
-          <p>
-            Pesanan Anda
-          </p>
+      <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+        <div class="m-l-25 m-r--38 m-lr-0-xl">
+          <div class="wrap-table-shopping-cart">
+            <table class="table-shopping-cart">
+              <tr class="table_head">
+                <th class="column-1">ID Order</th>
+                <th class="column-2">Tanggal Order</th>
+                <th>Total Bayar</th>
+                <th>Status</th>
+              </tr>
+              @foreach (var item in Model)
+              {
+                <tr class="table_row">
+                  <td class="column-1">#111-@item.IdOrder</td>
+                  <td class="column-2">@item.TglTransaksi</td>
+                  <td>@item.JumlahBayar.ToIDR()</td>
+                  <td >
+                    @Html.ActionLink(item.Status, "DetailOrder", "Order", new {
+                  id = item.IdOrder
+                  })
+                  </td>
+                </tr>
+              }
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-  <table class="table">
-    <thead>
-      <tr class="text-nowrap">
-        <th>#</th>
-        <th>Id Order</th>
-        <th>Tanggal Order</th>
-        <th>Total Bayar</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var item in Model)
-      {
-        i++;
-        <tr>
-          <td>@i</td>
-          <td>@item.IdOrder</td>
-          <td>@item.TglTransaksi</td>
-          <td>@item.JumlahBayar</td>
-          <td><span class="badge badge-info">@Html.ActionLink(item.Status, "DetailOrder", "Order", new {
-          id = item.IdOrder
-          })</span></td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
-</div>
-</section>
+ </div> 

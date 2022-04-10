@@ -63,7 +63,7 @@ public class HomeController : BaseController
     {
 
             var viewModels = new List<ProdukCustomerViewModel>();
-             var dbResult = await _produkService.Get(pageCount??2, (page??1 - 1) * (pageCount??2), string.Empty);
+             var dbResult = await _produkService.Get(pageCount??10, (page??1 - 1) * (pageCount??10), string.Empty);
 
              if(dbResult == null || !dbResult.Any())
         {

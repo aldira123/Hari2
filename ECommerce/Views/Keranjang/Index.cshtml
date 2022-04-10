@@ -1,112 +1,103 @@
-@using System.Globalization
+@using eCommerce.Helpers;
 @model List<eCommerce.ViewModels.KeranjangViewModel>
 @{
-  ViewData["Title"] = "Home Page";
-  Layout = "_CustomerHomeLayout";
-  int i = 0;
+  ViewData["Title"] = "Keranjang";
+  Layout = "_CustomerLayout";
+  int total = 0;
 }
-<div class="featured-page">
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+  <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+    <a href="/Home/Index" class="stext-109 cl8 hov-cl1 trans-04">
+      Home
+      <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+    </a>
+
+    <span class="stext-109 cl4">
+      Shoping Cart
+    </span>
+  </div>
+</div>
+
+
+<!-- Shoping Cart -->
+<div class="bg0 p-t-75 p-b-85">
   <div class="container">
     <div class="row">
-      <div class="col-md-4 col-sm-12">
-        <div class="section-heading">
-          <div class="line-dec"></div>
-          <h1>Keranjangmu</h1>
-        </div>
-      </div>
-      <div class="col-md-8 col-sm-12">
-        <div id="filters" class="button-group">
-          <p>
-            Segera checkout Keranjangmu, sebelum kehabisan
-          </p>
+      <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+        <div class="m-l-25 m-r--38 m-lr-0-xl">
+          <div class="wrap-table-shopping-cart">
+            <table class="table-shopping-cart">
+              <tr class="table_head">
+                <th class="column-1">Product</th>
+                <th class="column-2"></th>
+                <th class="column-3">Quantity</th>
+                <th class="column-4">Total</th>
+                <th class="column-5"></th>
+                <th class="column-6"></th>
+              </tr>
+              @foreach (var item in Model)
+              {
+                <tr class="table_row">
+                  <td class="column-1">
+                    <div class="how-itemcart1">
+                      <img src="~/@item.Image" alt="IMG">
+                    </div>
+                  </td>
+                  <td class="column-2">@item.NamaProduk</td>
+                  <form asp-controller="Keranjang" asp-action="Edit" method="post">
+                    <td class="column-3">
+                      <div for=JumlahBarang class="wrap-num-product flex-w m-l-auto m-r-0">
+                        <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                          <i class="fs-16 zmdi zmdi-minus"></i>
+                        </div>
+
+                        <input for="JumlahBarang" class="mtext-104 cl3 txt-center num-product" type="number"
+                        name="JumlahBarang" value="@item.JumlahBarang" id="JumlahBarang">
+
+                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                          <i class="fs-16 zmdi zmdi-plus"></i>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="column-4">@item.Subtotal.ToIDR()</td>
+                    <td></td>
+                    <td class="column-6">
+                      <input type="hidden" name="IdProduk" value="@item.IdProduk" />
+                      <button type="submit"
+                      class="flex-c-m stext-101 cl2 size-100 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                        update
+                      </button>
+                    </td>
+                  </form>
+                </tr>
+              }
+            </table>
+          </div>
+          <form asp-controller="Order" asp-action="Checkout">
+            @foreach (var item in Model)
+            {
+              <input type="hidden" name="Id" value="@item.IdKeranjang" />
+              <input type="hidden" name="Qty" value="@item.JumlahBarang" />
+            }
+            <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-100-sm">
+              <div class="flex-w flex-m m-r-20 m-tb-5">
+                <select class="js-select2 stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" name="Alamat" asp-items="@ViewBag.AlamatDataSource"></select>
+                <div class="dropDownSelect2"></div>
+              </div>
+
+
+              <button type="submit"
+                class="flex-c-m stext-101 cl2 size-119 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-10">
+                Checkout
+              </button>
+            </div>
+          </form>
+
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-
-  <table class="table">
-    <thead>
-      <tr class="text-nowrap">
-        <th>#</th>
-        <th>Id Produk</th>
-        <th>Gambar</th>
-        <th>Jumlah</th>
-        <th>SubTotal</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var item in Model)
-      {
-        i++;
-        <tr>
-          <td>@i</td>
-          <td>@item.IdProduk</td>
-          <td> <img src="~/@item.Image" height="100" /></td>
-          <form asp-controller="Keranjang" asp-action="Edit" method="post">
-            <td>
-              <input type="hidden" name="IdProduk" value="@item.IdProduk" />
-              @* <input type="hidden" name="Harga" value="@item.HargaBarang" />  *@
-              <input type="number" name="JumlahBarang" value="@item.JumlahBarang" />
-            </td>
-            <td>@item.Subtotal.ToString("C", new CultureInfo("id-ID"))</td>
-            <td>
-              <button type="submit">Update</button>
-            </td>
-          </form>
-          <td><a asp-action="Delete" asp-route-id="@item.IdKeranjang" class="btn btn-sm btn-primary">Delete</a></td>
-        </tr>
-      }
-    </tbody>
-  </table>
-  <form asp-controller="Order" asp-action="Checkout">
-    @foreach (var item in Model)
-    {
-      <input type="hidden" name="Id" value="@item.IdKeranjang" />
-      <input type="hidden" name="Qty" value="@item.JumlahBarang" />
-    }
-    <label>Pilih Alamat Pengiriman</label>
-    <select name="Alamat" asp-items="@ViewBag.AlamatDataSource"></select>
-    <br />
-    <button type="submit">Checkout</button>
-  </form>
-</div>
-
-</div>
-</section>
-
-@*
-  @section Scripts {
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="text/javascript">
-  $(document).ready(function () {
-  $("input[name='Qty']").on('change', function (e) {
-  let qty = $(this).val(),
-  harga = $(this).siblings("input[name='Harga']").val();
-  let id = $(this).siblings("input[name='Id']").val(),
-  base = $(this);
-  $.ajax({
-  url: "/Keranjang/Edit",
-  type: "post",
-  data: { IdKeranjang: id, JumlahBarang: qty },
-  dataType: "json",
-  success: function (response) {
-  if (response.success) {
-  console.log(response.message);
-  base.parent().siblings(".sub-tot").text(`Rp.${hitung(harga, qty)}`);
-  } else {
-  console.log(response.message);
-  }
-  }
-  })
-  })
-  const hitung = (harga, qty) => {
-  let total = parseFloat(harga) * parseFloat(qty);
-  var abc = new Intl.NumberFormat(['ban', 'id']).format(total);
-  return abc;
-  }
-  });
-  </script>
-  } *@

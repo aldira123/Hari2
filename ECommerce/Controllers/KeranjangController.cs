@@ -92,6 +92,15 @@ public class KeranjangController : Controller
         {
             return BadRequest();
         }
+        var produk = await _produkService.Get(produkId.Value);
+        if (produk == null)
+        {
+            return BadRequest();
+        }
+        produk.Stok -= request.JumlahBarang;
+        _dbContext.Update(produk);
+        await _dbContext.SaveChangesAsync();
+
 
         await _keranjangService.Add(new Datas.Entities.Keranjang
         {
@@ -110,54 +119,96 @@ public class KeranjangController : Controller
             var keranjang = await _dbContext.Keranjangs.FirstOrDefaultAsync(x=> x.IdProduk == IdProduk);
             var produk = await _dbContext.Produks.FirstOrDefaultAsync(x=> x.IdProduk == keranjang.IdProduk);
 
+            if(keranjang.JumlahBarang > JumlahBarang){
+                produk.Stok += (keranjang.JumlahBarang - JumlahBarang);
+            }else{
+                produk.Stok -= (JumlahBarang - keranjang.JumlahBarang);
+            }
             keranjang.JumlahBarang = JumlahBarang;
             keranjang.Subtotal = JumlahBarang * produk.HargaProduk;
+            
             await _dbContext.SaveChangesAsync();
 
 
             return Redirect(nameof(Index));
         }
 
+        [HttpPost]
      public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return BadRequest();
-        }
-        var delete = await _keranjangService.Get(id.Value);
-        if (delete == null)
-        {
-            return NotFound();
-        }
-        return View(new KeranjangViewModel(delete));
-    }
+     {
+          if (id == null)
+          {
+               return Json(new
+               {
+                    success = false,
+                    message = "keranjang item yang mau dihapus tidak ditemukan"
+               });
+          }
 
-    // POST: KategoriProduks/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int? id, KeranjangViewModel request)
-    {
-        if (id == null)
-        {
-            return BadRequest();
-        }
-        try
-        {
-            await _keranjangService.Delete(id.Value);
+          try
+          {
 
-            return RedirectToAction(nameof(Index));
-        }
-        catch (InvalidOperationException ex)
-        {
-            ViewBag.ErrorMessage = ex.Message;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+               await _keranjangService.Delete(id.Value);
 
-        return View(request);
-    }
+               return Json(new
+               {
+                    success = true
+               });
+          }
+          catch (InvalidOperationException ex)
+          {
+               return Json(new
+               {
+                    success = false,
+                    message = ex.Message
+               });
+          }
+          catch
+          {
+               throw;
+          }
+     }
+
+    //  public async Task<IActionResult> Delete(int? id)
+    // {
+    //     if (id == null)
+    //     {
+    //         return BadRequest();
+    //     }
+    //     var delete = await _keranjangService.Get(id.Value);
+    //     if (delete == null)
+    //     {
+    //         return NotFound();
+    //     }
+    //     return View(new KeranjangViewModel(delete));
+    // }
+
+    // // POST: KategoriProduks/Delete/5
+    // [HttpPost, ActionName("Delete")]
+    // [ValidateAntiForgeryToken]
+    // public async Task<IActionResult> Delete(int? id, KeranjangViewModel request)
+    // {
+    //     if (id == null)
+    //     {
+    //         return BadRequest();
+    //     }
+    //     try
+    //     {
+    //         await _keranjangService.Delete(id.Value);
+
+    //         return RedirectToAction(nameof(Index));
+    //     }
+    //     catch (InvalidOperationException ex)
+    //     {
+    //         ViewBag.ErrorMessage = ex.Message;
+    //     }
+    //     catch (Exception)
+    //     {
+    //         throw;
+    //     }
+
+    //     return View(request);
+    // }
       
 
 }

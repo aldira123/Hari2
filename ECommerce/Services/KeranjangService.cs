@@ -46,6 +46,10 @@ public class KeranjangService : BaseDbService, IKeranjangService
     public async Task<bool> Delete(int id)
     {
         var Keranjang = await DbContext.Keranjangs.FirstOrDefaultAsync(x=>x.IdKeranjang == id);
+        var product = await DbContext.Produks.FirstOrDefaultAsync(x=> x.IdProduk == Keranjang.IdProduk);
+        product.Stok += Keranjang.JumlahBarang;
+        DbContext.Update(product);
+
 
         if(Keranjang == null) {
             throw new InvalidOperationException($"Keranjang with ID {id} doesn't exist");

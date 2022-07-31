@@ -3,7 +3,6 @@
 @{
   ViewData["Title"] = "Keranjang";
   Layout = "_CustomerLayout";
-  int total = 0;
 }
 <br>
 <br>
@@ -25,19 +24,18 @@
 
 <!-- Shoping Cart -->
 <div class="bg0 p-t-75 p-b-85">
-  <div class="container">
-    <div class="row">
       <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
         <div class="m-l-25 m-r--38 m-lr-0-xl">
           <div class="wrap-table-shopping-cart">
             <table class="table-shopping-cart">
               <tr class="table_head">
-                <th class="column-1">Product</th>
+                <th class="column-1 text-center">Product</th>
                 <th class="column-2"></th>
-                <th class="column-3">Quantity</th>
-                <th class="column-4">Total</th>
+                <th class="column-4 text-center">Quantity</th>
+                <th class="column-5 text-center">Total</th>
                 <th class="column-5"></th>
                 <th class="column-6"></th>
+                <th class="column-7"></th>
               </tr>
               @foreach (var item in Model)
               {
@@ -49,7 +47,7 @@
                   </td>
                   <td class="column-2">@item.NamaProduk</td>
                   <form asp-controller="Keranjang" asp-action="Edit" method="post">
-                    <td class="column-3">
+                    <td class="column-4">
                       <div for=JumlahBarang class="wrap-num-product flex-w m-l-auto m-r-0">
                         <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                           <i class="fs-16 zmdi zmdi-minus"></i>
@@ -63,8 +61,7 @@
                         </div>
                       </div>
                     </td>
-                    <td class="column-4">@item.Subtotal.ToIDR()</td>
-                    <td></td>
+                    <td class="column-5">@item.Subtotal.ToIDR()</td>
                     <td class="column-6">
                       <input type="hidden" name="IdProduk" value="@item.IdProduk" />
                       <button type="submit"
@@ -72,6 +69,8 @@
                         update
                       </button>
                     </td>
+                     <td class="column-7 p-lr-15  mt-5"><button class="btn btn-sm btn-danger b-hapus" type="button"
+                           data-keranjang="@item.IdKeranjang"><i class="fas fa-trash"></i></button></td>
                   </form>
                 </tr>
               }
@@ -98,6 +97,42 @@
           </form>
 
         </div>
-      </div>
-    </div>
   </div>
+
+@section Scripts {
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+   $(document).ready(function () {
+      $(".b-hapus").on('click', function (e) {
+         let id = $(this).attr("data-keranjang");
+         console.log(id);
+         Swal.fire({
+            title: 'Hapus Produk dari keranjang?',
+            showDenyButton: true,
+            confirmButtonText: 'Tidak',
+            denyButtonText: `Ya`,
+         }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (!result.isConfirmed) {
+               $.ajax({
+                  url: "/Keranjang/Delete",
+                  type: "post",
+                  data: { id: id },
+                  dataType: "json",
+                  success: function (response) {
+                     if (response.success) {
+                        console.log(response.message);
+                        window.location.reload(true);
+                     } else {
+                        console.log(response.message);
+                     }
+                  }
+               })
+            } else if (result.isDenied) {
+               Swal.fire('Changes are not saved', '', 'info')
+            }
+         })
+      })
+   });
+</script>
+}

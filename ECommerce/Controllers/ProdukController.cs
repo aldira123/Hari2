@@ -46,6 +46,7 @@ namespace eCommerce.Controllers
                     DeskripsiProduk = dbResult[i].DeskripsiProduk,
                     Gambar = dbResult[i].Gambar,
                     HargaProduk = dbResult[i].HargaProduk,
+                    Stok = dbResult[i].Stok,
                     Kategories = dbResult[i].ProdukKategoris.Select(x => new KategoriViewModel
                     {
                         IdKategori = x.IdKategori,
@@ -79,6 +80,7 @@ namespace eCommerce.Controllers
                 NamaProduk = produk.NamaProduk,
                 DeskripsiProduk = produk.DeskripsiProduk,
                 HargaProduk = produk.HargaProduk,
+                Stok = produk.Stok,
                 Gambar = produk.Gambar,
                 KategoriId = kategoriIds
             });
@@ -206,6 +208,7 @@ namespace eCommerce.Controllers
                 DeskripsiProduk = produk.DeskripsiProduk,
                 HargaProduk = produk.HargaProduk,
                 Gambar = produk.Gambar,
+                Stok = produk.Stok,
                 KategoriId = kategoriIds
             });
         }
@@ -331,6 +334,7 @@ namespace eCommerce.Controllers
                 NamaProduk = produk.NamaProduk,
                 DeskripsiProduk = produk.DeskripsiProduk,
                 HargaProduk = produk.HargaProduk,
+                Stok = produk.Stok,
                 Gambar = produk.Gambar,
                 KategoriId = kategoriIds
             });

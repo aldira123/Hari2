@@ -24,6 +24,7 @@ public class ProdukViewModel
     public string DeskripsiProduk { get; set; } = null!;
     [Required]
     public decimal HargaProduk { get; set; }
+    public int Stok {get; set;}
 
     public string? Gambar { get; set; }
     public string GambarSrc {

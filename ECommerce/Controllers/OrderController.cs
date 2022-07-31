@@ -90,7 +90,8 @@ public class OrderController : BaseController
     [Authorize(Roles = AppConstant.CUSTOMER)]
     public async Task<IActionResult> MyOrder()
     {
-        var result = await _orderService.Get(HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value.ToInt());
+        var result = await _orderService.Get
+        (HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value.ToInt());
 
         return View(result);
     }
@@ -157,13 +158,9 @@ public class OrderController : BaseController
 
         await _keranjangService.Clear(idCustomer);
 
-        return RedirectToAction(nameof(CheckoutBerhasil));
+        return RedirectToAction(nameof(MyOrder));
     }
 
-    public IActionResult CheckoutBerhasil()
-    {
-        return View();
-    }
 
     [Authorize(Roles = AppConstant.CUSTOMER)]
     public async Task<IActionResult> DetailOrder(int? id)

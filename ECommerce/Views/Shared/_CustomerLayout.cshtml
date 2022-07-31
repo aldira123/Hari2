@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Home</title>
+	<title>Coza Store</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -62,24 +62,17 @@
 							</li>
 
 							<li>
-								<a href="/Home/Produk">Shop</a>
+								<a href="/Home/Produk" title="Produk">Shop</a>
 							</li>
 
 							<li>
-								<a href="/Home/Kategori">Kategori</a>
+								<a href="/Home/Kategori" title="Kategori Produk">Kategori</a>
+							</li>
+							<li>
+								<a href="/Home/About" title="About">About Me</a>
 							</li>
 
-							<li>
-								<a href="blog.html">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.html">About</a>
-							</li>
-
-							<li>
-								<a href="contact.html">Contact</a>
-							</li>
+							
 						</ul>
 					</div>
 
@@ -92,6 +85,7 @@
 									<a href="/Akun/Login"> Admin </a>
 								</li>
 								<li>
+									
 									<a href="/Home/Index">Profile</a>
 									<ul class="sub-menu">
 										<li><a href="/Akun/LoginCustomer">Login</a></li>
@@ -103,6 +97,10 @@
 
 						@if (ViewBag.IsLogged != null && ViewBag.IsLogged)
 						{
+							<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-cart">
+								<a href="/Keranjang/Index" class="zmdi zmdi-shopping-cart"></a>
+							</div>
+
 							<div class="menu-desktop">
 							<ul class="main-menu">
 								<li>
@@ -113,10 +111,6 @@
 										<li><a href="/Akun/Logout">Logout</a></li>
 									</ul>
 								</li>
-						</div>
-
-							<div class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-cart">
-								<a href="/Keranjang/Index" class="zmdi zmdi-shopping-cart"></a>
 							</div>
 						}
 

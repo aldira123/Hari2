@@ -365,16 +365,12 @@ namespace eCommerce.Datas.Migrations
                         .HasColumnName("pajak");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("status");
 
-                    b.Property<int?>("StatusOrderIdStatus")
-                        .HasColumnType("int(11)");
-
-                    b.Property<DateOnly>("TanggalBayar")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("TanggalBayar")
+                        .HasColumnType("datetime(6)")
                         .HasColumnName("tanggal_bayar");
 
                     b.Property<string>("Tujuan")
@@ -386,13 +382,9 @@ namespace eCommerce.Datas.Migrations
                     b.HasKey("IdPembayaran")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("StatusOrderIdStatus");
-
                     b.HasIndex(new[] { "IdCustomer" }, "FK__customer_pembayaran");
 
                     b.HasIndex(new[] { "IdOrder" }, "FK__order_pembayaran");
-
-                    b.HasIndex(new[] { "Status" }, "FK_pembayaran_status_order");
 
                     b.ToTable("pembayaran", (string)null);
                 });
@@ -427,7 +419,9 @@ namespace eCommerce.Datas.Migrations
                         .HasDefaultValueSql("''");
 
                     b.Property<string>("Noresi")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("no_resi");
 
                     b.Property<decimal>("Ongkir")
                         .HasPrecision(10, 2)
@@ -440,13 +434,8 @@ namespace eCommerce.Datas.Migrations
                         .HasColumnType("varchar(100)")
                         .HasColumnName("status");
 
-                    b.Property<int?>("StatusOrderIdStatus")
-                        .HasColumnType("int(11)");
-
                     b.HasKey("IdPengiriman")
                         .HasName("PRIMARY");
-
-                    b.HasIndex("StatusOrderIdStatus");
 
                     b.HasIndex(new[] { "IdAlamat" }, "FK__alamat_pengiriman");
 
@@ -667,10 +656,6 @@ namespace eCommerce.Datas.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__order_pembayaran");
 
-                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", null)
-                        .WithMany("Pembayarans")
-                        .HasForeignKey("StatusOrderIdStatus");
-
                     b.Navigation("IdCustomerNavigation");
 
                     b.Navigation("IdOrderNavigation");
@@ -689,10 +674,6 @@ namespace eCommerce.Datas.Migrations
                         .HasForeignKey("IdOrder")
                         .IsRequired()
                         .HasConstraintName("FK__order_pengiriman");
-
-                    b.HasOne("eCommerce.Datas.Entities.StatusOrder", null)
-                        .WithMany("Pengirimen")
-                        .HasForeignKey("StatusOrderIdStatus");
 
                     b.Navigation("IdAlamatNavigation");
 
@@ -783,10 +764,6 @@ namespace eCommerce.Datas.Migrations
             modelBuilder.Entity("eCommerce.Datas.Entities.StatusOrder", b =>
                 {
                     b.Navigation("Orders");
-
-                    b.Navigation("Pembayarans");
-
-                    b.Navigation("Pengirimen");
                 });
 #pragma warning restore 612, 618
         }

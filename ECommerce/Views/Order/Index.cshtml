@@ -25,18 +25,18 @@
         </div>
 
         <div class="row">
-          <form asp-action="Index" asp-controller="Order">
-            <div class="col-md-4">
-              <input type="date" name="date" value="@ViewBag.FilterDate">@ViewBag.FilterDate</input>
+          <form asp-action="Index" asp-controller="Order" class="form col-md-12 mb-5">
+          <div class="row">
+            <div class="col-md-4 ml-4" >
+              <input type="date" name="date" value="@ViewBag.FilterDate" class="form-control"></input>
             </div>
             <div class="col-md-4">
-              <select asp-items="@ViewBag.StatusList" name="status">
-
-              </select>
+              <select asp-items="@ViewBag.StatusList" name="status" class="form-control"></select>
             </div>
-            <div class="col-md-4">
-              <input type="submit" value="Cari" />
+            <div class="col-md-2 ml-5">
+              <input type="submit" value="Cari" class="btn btn-primary"/>
             </div>
+          </div>
           </form>
         </div>
 

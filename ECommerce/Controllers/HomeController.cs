@@ -25,19 +25,43 @@ public class HomeController : BaseController
 
     }
 
-    public async  Task<IActionResult> Produk(int? page, int? pageCount){
+    // public async  Task<IActionResult> Produk(int? page, int? pageCount){
+    //     var viewModels = new List<ProdukCustomerViewModel>();
+    //     var tuplePagination = Common.ToLimitOffset(page, pageCount);
+    //     var dbResult = await _produkService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
+
+    //          if(dbResult == null || !dbResult.Any())
+    //     {
+    //         return RedirectToAction(nameof(Produk), new {
+    //             page = page > 1 ? page - 1 : 1,
+    //             pageCount = pageCount
+    //         });
+    //     }
+
+    //         for (int i = 0; i < dbResult.Count; i++)
+    //         {
+    //             viewModels.Add(new ProdukCustomerViewModel
+    //             {
+    //                 IdProduk = dbResult[i].IdProduk,
+    //                 NamaProduk = dbResult[i].NamaProduk,
+    //                 DeskripsiProduk = dbResult[i].DeskripsiProduk,
+    //                 Gambar = dbResult[i].Gambar,
+    //                 HargaProduk = dbResult[i].HargaProduk,
+    //                 Kategories = dbResult[i].ProdukKategoris.Select(x => new KategoriViewModel
+    //                 {
+    //                     IdKategori = x.IdKategori,
+    //                     NamaKategori = x.IdKategoriNavigation.NamaKategori,
+    //                     Icon = x.IdKategoriNavigation.Icon
+    //                 }).ToList()
+    //             });
+    //         }
+    //         ViewBag.HalamanSekarang = page ?? 1;
+    //         return View(viewModels);
+    // }
+
+    public async  Task<IActionResult> Produk(){
         var viewModels = new List<ProdukCustomerViewModel>();
-        var tuplePagination = Common.ToLimitOffset(page, pageCount);
-        var dbResult = await _produkService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
-
-             if(dbResult == null || !dbResult.Any())
-        {
-            return RedirectToAction(nameof(Produk), new {
-                page = page > 1 ? page - 1 : 1,
-                pageCount = pageCount
-            });
-        }
-
+        var dbResult = await _produkService.GetAll();
             for (int i = 0; i < dbResult.Count; i++)
             {
                 viewModels.Add(new ProdukCustomerViewModel
@@ -55,7 +79,6 @@ public class HomeController : BaseController
                     }).ToList()
                 });
             }
-            ViewBag.HalamanSekarang = page ?? 1;
             return View(viewModels);
     }
 
@@ -96,19 +119,38 @@ public class HomeController : BaseController
 
     //page = Halaman
     //PageCount = Jumlah data yang ditampilkan per halaman
-    public async Task<IActionResult> Kategori(int? page, int? pageCount)
+    // public async Task<IActionResult> Kategori(int? page, int? pageCount)
+    // {
+    //      var viewModels = new List<KategoriCustomerViewModel>();
+    //      var tuplePagination = Common.ToLimitOffset(page, pageCount);
+    //     var dbResult = await _kategoriService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
+
+    //      if(dbResult == null || !dbResult.Any())
+    //     {
+    //         return RedirectToAction(nameof(Kategori), new {
+    //             page = page > 1 ? page - 1 : 1,
+    //             pageCount = pageCount
+    //         });
+    //     }
+
+    //         for (int i = 0; i < dbResult.Count; i++)
+    //         {
+    //             viewModels.Add(new KategoriCustomerViewModel
+    //             {
+    //                 NamaKategori = dbResult[i].NamaKategori,
+    //                 DeskripsiKategori = dbResult[i].DeskripsiKategori,
+    //                 Icon = dbResult[i].Icon,
+    //             });
+    //         }
+    //         ViewBag.HalamanSekarang = page ?? 1;
+    //         return View(viewModels);
+    // }
+
+    public async Task<IActionResult> Kategori()
     {
          var viewModels = new List<KategoriCustomerViewModel>();
-         var tuplePagination = Common.ToLimitOffset(page, pageCount);
-        var dbResult = await _kategoriService.Get(tuplePagination.Item1, tuplePagination.Item2, string.Empty);
-
-         if(dbResult == null || !dbResult.Any())
-        {
-            return RedirectToAction(nameof(Kategori), new {
-                page = page > 1 ? page - 1 : 1,
-                pageCount = pageCount
-            });
-        }
+         
+        var dbResult = await _kategoriService.GetAll();
 
             for (int i = 0; i < dbResult.Count; i++)
             {
@@ -119,11 +161,12 @@ public class HomeController : BaseController
                     Icon = dbResult[i].Icon,
                 });
             }
-            ViewBag.HalamanSekarang = page ?? 1;
+           
             return View(viewModels);
     }
 
-    public IActionResult Privacy()
+
+    public IActionResult About()
     {
         return View();
     }

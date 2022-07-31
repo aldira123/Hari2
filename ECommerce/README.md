@@ -20,16 +20,12 @@
 ![ListAdmin](https://user-images.githubusercontent.com/102128920/160933509-830456d1-91f8-48e9-bec4-d7523598e447.png)
 # Katalog Produk
 ![ListProdukCustomer](https://user-images.githubusercontent.com/102128920/161178253-9e5da872-0fe6-4913-b2cf-af46d6b9d681.png)
-# Katalog Kategori
-![listKategoriCustumer](https://user-images.githubusercontent.com/102128920/161178429-ca36784f-90d4-4412-9c14-e40d629e7c45.png)
 # Detail Produk
-![DetailProduk](https://user-images.githubusercontent.com/102128920/161178350-9a4c9e2b-6285-43dc-a8a2-c69b703f65d4.png)
+![DetailProduk](https://user-images.githubusercontent.com/102128920/162624490-c869b0e6-94e3-47ba-8746-308d267e089c.png)
 # Keranjang
-![Keranjang](https://user-images.githubusercontent.com/102128920/161182189-c5e79d0c-8053-4565-a071-293a67071184.png)
-# Alamat
-![Alamat](https://user-images.githubusercontent.com/102128920/161435117-4469a46f-2a3f-4c5a-a96a-4a88acc6e3a8.png)
+![Keranjang](https://user-images.githubusercontent.com/102128920/162624494-85270d5b-a8fe-425b-877a-fe4c11741855.png)
 # List Pesanan
-![ListPesanan](https://user-images.githubusercontent.com/102128920/161435123-84e1094b-f677-44db-b89a-df193b75052f.png)
-![DetailOrder](https://user-images.githubusercontent.com/102128920/161464478-f26e0c7e-3b6c-43ea-bad8-64f035a74717.png)
-
+![Home](https://user-images.githubusercontent.com/102128920/162624500-d74e6fa8-c521-4aee-856a-1971189e4fec.png)
+# Invoice
+![Invoice](https://user-images.githubusercontent.com/102128920/162624497-66f448dd-851e-49ad-97a9-b9cc73410d15.png)
 
